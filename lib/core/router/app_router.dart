@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/router/app_name.dart';
-import 'package:ecommerce/presentation/srceen/login.dart';
-import 'package:ecommerce/presentation/srceen/signup.dart';
-import 'package:ecommerce/presentation/srceen/splash.dart';
+import 'package:ecommerce/presentation/authentication/srceen/login.dart';
+import 'package:ecommerce/presentation/authentication/srceen/signup.dart';
+import 'package:ecommerce/presentation/authentication/srceen/splash.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {

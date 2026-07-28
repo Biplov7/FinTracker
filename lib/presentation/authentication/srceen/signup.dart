@@ -2,9 +2,9 @@ import 'package:ecommerce/core/router/app_name.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
-import 'package:ecommerce/presentation/widget/my_button.dart';
-import 'package:ecommerce/presentation/widget/my_text.dart';
-import 'package:ecommerce/presentation/widget/my_text_field.dart';
+import 'package:ecommerce/presentation/authentication/widget/my_button.dart';
+import 'package:ecommerce/presentation/authentication/widget/my_text.dart';
+import 'package:ecommerce/presentation/authentication/widget/my_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 

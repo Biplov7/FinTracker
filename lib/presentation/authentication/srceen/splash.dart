@@ -1,5 +1,5 @@
 import 'package:ecommerce/core/router/app_name.dart';
-import 'package:ecommerce/presentation/widget/my_progress_indicator.dart';
+import 'package:ecommerce/presentation/authentication/widget/my_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

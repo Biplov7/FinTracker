@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "601042311403",
+    "project_id": "fintrack-4df01",
+    "storage_bucket": "fintrack-4df01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601042311403:android:59ed53e20d210bf2c286ae",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "601042311403-3e2553p2p208amqg2lveojoehn5trgnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXg9jS9NGhJ8dPdKMU1we09lgZTRfJsvM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "601042311403-3e2553p2p208amqg2lveojoehn5trgnc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "601042311403-6kh9i19i05hnh8kk9kpe2v4qpmtpmprp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecommerce"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

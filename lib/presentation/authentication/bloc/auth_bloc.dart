@@ -26,21 +26,47 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
     on<CheckAuthRequested>(_checkAuthRequested);
   }
 
-  void _authSignIn(AuthSignIn event,Emitter<AuthState> emit){
-
-  }
-  void _authSignOut(AuthSignOut event, Emitter<AuthState> emit){
-    emit(AuthProgress());
+  void _authSignIn(AuthSignIn event,Emitter<AuthState> emit)async{
     try{
-      SignoutUsecase();
+      emit(AuthProgress());
+      final user = await signInUseCase(event.login);
+      emit(AuthAuthenticate(user));
+    }catch(e){
+      emit(AuthFailure("Something went wrong."));
+    }
+  }
+  void _authSignOut(AuthSignOut event, Emitter<AuthState> emit) async{
+    
+    try{
+      emit(AuthProgress());
+      await signOutUseCase();
+      emit(AuthUnAuthenticate());
     }catch(e){
       emit(AuthFailure("Failed to SignOut"));
     }
   }
-  void _authSignUp(AuthSignUp event,Emitter<AuthState> emit){
-
+  void _authSignUp(AuthSignUp event,Emitter<AuthState> emit)async{
+    try{
+      emit(AuthProgress());
+      final user = await signUpUseCase(event.signup);
+      emit(AuthAuthenticate(user));
+    }catch(e){
+      
+      emit(AuthFailure("Failed to SignIn user"));
+    }
   }
-  void _checkAuthRequested(CheckAuthRequested event,Emitter<AuthState> emit){
+  void _checkAuthRequested(CheckAuthRequested event,Emitter<AuthState> emit)async{
+    try{
+      final isLoggedIn = await isLoggedInUseCase();
 
+      if(isLoggedIn){
+        final user = await currentUserUseCase();
+        emit(AuthAuthenticate(user!));
+      }else{
+        emit(AuthUnAuthenticate());
+      }
+    }catch(e){
+      emit(AuthFailure("User not authenticate"));
+    }
   }
 }

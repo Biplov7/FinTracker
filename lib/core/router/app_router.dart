@@ -1,4 +1,5 @@
 import 'package:ecommerce/core/router/app_name.dart';
+import 'package:ecommerce/presentation/authentication/srceen/home.dart';
 import 'package:ecommerce/presentation/authentication/srceen/login.dart';
 import 'package:ecommerce/presentation/authentication/srceen/signup.dart';
 import 'package:ecommerce/presentation/authentication/srceen/splash.dart';
@@ -23,6 +24,11 @@ class AppRouter {
       name: AppName.signupName,
       builder: (context, state) {
         return Signup();
+      },),
+      GoRoute(path: '/home',
+      name: AppName.homeName,
+      builder: (context, state) {
+        return Home();
       },)
     ]);
 }

@@ -7,12 +7,14 @@ class MyButton extends StatelessWidget {
   final Color color;
   final Color txtColor;
   final Widget? icon;
+  final VoidCallback? onPressed;
   const MyButton({
     super.key,
     required this.text,
     required this.color,
     required this.txtColor,
     this.icon,
+    this.onPressed,
   });
 
   @override
@@ -21,7 +23,7 @@ class MyButton extends StatelessWidget {
       width: double.infinity,
       height: AppSpacing.xxl,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           elevation: 4,
           backgroundColor: color,

@@ -3,7 +3,8 @@ import 'package:ecommerce/data/authentication/model/singup_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthDatasource {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    final FirebaseAuth firebaseAuth;
+  AuthDatasource(this.firebaseAuth);
 
   Stream<User?> get authStateChange => firebaseAuth.authStateChanges();
 

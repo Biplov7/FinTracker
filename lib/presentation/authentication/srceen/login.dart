@@ -23,7 +23,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-  bool pw = false;
+  bool pw = true;
 
   @override
   void dispose() {

@@ -25,7 +25,7 @@ class _SignupState extends State<Signup> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   final TextEditingController confirmPassword = TextEditingController();
-  bool pw = false;
+  bool pw = true;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
@@ -35,7 +35,7 @@ class _SignupState extends State<Signup> {
             SnackBar(
               content: Text("SignIn successfully"),
               behavior: SnackBarBehavior.floating,
-              backgroundColor: AppColors.danger,
+              backgroundColor: AppColors.success,
             ),
           );
           context.goNamed(AppName.homeName);

@@ -9,6 +9,8 @@ class AppColors {
   static const Color success = Color(0xFF22C55E);
   static const Color danger = Color(0xFFEF4444);
 
+  static const Color transp = Colors.transparent;
+
   static const Color background = Color(0xFFF8FAFC);
   static const Color card = Colors.white;
 

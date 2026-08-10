@@ -52,7 +52,7 @@ class _SplashState extends State<Splash> {
                     height: 270,
                     width: 160,
                   ),
-                  MyProgressIndicator(),
+                  MyProgressIndicator(height: 5, width: 92, value: 0.67),
                 ],
               ),
             ),

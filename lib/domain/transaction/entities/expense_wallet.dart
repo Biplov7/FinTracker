@@ -1,0 +1,1 @@
+enum ExpenseWallet { cash, creditCard }

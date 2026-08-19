@@ -1,9 +1,9 @@
 class SignupEntity {
-  String userName;
-  String email;
-  String password;
+  final String userName;
+  final String email;
+  final String password;
 
-  SignupEntity(this.userName, this.email, this.password);
+  const SignupEntity(this.userName, this.email, this.password);
 
   SignupEntity copyWith({String? userName, String? email, String? password}) {
     return SignupEntity(

@@ -1,3 +1,4 @@
+import 'package:ecommerce/core/router/app_name.dart';
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_balance_card.dart';
@@ -5,6 +6,7 @@ import 'package:ecommerce/presentation/dashboard/widget/my_budget_progress.dart'
 import 'package:ecommerce/presentation/dashboard/widget/my_recent_transaction.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_stat_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -76,7 +78,9 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-        onPressed: () {},
+        onPressed: () {
+          context.push(AppName.addTransactionName);
+        },
         child: Icon(Icons.add),
       ),
       backgroundColor: AppColors.primary,

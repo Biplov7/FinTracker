@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Getdashboarddata {
   final FirebaseFirestore firestore;
-  Getdashboarddata(this.firestore);
+  final FirebaseAuth firebaseAuth;
+
+  Getdashboarddata(this.firestore, this.firebaseAuth);
 
   CollectionReference<Map<String, dynamic>> get user =>
       firestore.collection('user');
@@ -29,7 +31,10 @@ class Getdashboarddata {
   }
 
   Future<DashboardModel> getDashboardData() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError('No user is signed in.');
+    }
     final snapshot = await dashboardCollection(uid).doc('summary').get();
     return DashboardModel.fromMap(snapshot.data()!);
   }

@@ -3,7 +3,7 @@ import 'package:ecommerce/data/authentication/model/singup_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthDatasource {
-    final FirebaseAuth firebaseAuth;
+  final FirebaseAuth firebaseAuth;
   AuthDatasource(this.firebaseAuth);
 
   Stream<User?> get authStateChange => firebaseAuth.authStateChanges();
@@ -65,13 +65,13 @@ class AuthDatasource {
     if (user == null) {
       throw Exception("User is not siggned in");
     }
-    user.delete();
+    await user.delete();
   }
 
   Future<bool> isLoggedIn() async {
     final user = firebaseAuth.currentUser;
 
-    if(user==null){
+    if (user == null) {
       return false;
     }
     return true;

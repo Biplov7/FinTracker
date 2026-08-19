@@ -1,0 +1,39 @@
+import 'package:ecommerce/domain/transaction/usecases/addexpense_usecase.dart';
+import 'package:ecommerce/domain/transaction/usecases/addincome_usecase.dart';
+import 'package:ecommerce/presentation/transaction/bloc/transaction_event.dart';
+import 'package:ecommerce/presentation/transaction/bloc/transaction_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
+  final AddexpenseUsecase addexpenseUsecase;
+  final AddincomeUsecase addincomeUsecase;
+  TransactionBloc({
+    required this.addexpenseUsecase,
+    required this.addincomeUsecase
+  }):super(TransactionInitial()){
+    on<AddExpenseEvent>(_addExpenseEvent);
+    on<AddIncomeEvent>(_addIncomeEvent);
+  }
+
+  void _addExpenseEvent(AddExpenseEvent event, Emitter<TransactionState> emit) async {
+    try{
+      emit(TransactionLoading());
+      await addexpenseUsecase(event.entity);
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      emit(TransactionSuccess("Expense Added Successfully"));
+    }catch(e){
+      emit(TransactionFailure("Error Occured"));
+    }
+  }
+
+  void _addIncomeEvent(AddIncomeEvent event, Emitter<TransactionState> emit) async {
+    try{
+      emit(TransactionLoading());
+      await addincomeUsecase(event.entity);
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      emit(TransactionSuccess("Income Added Successfully"));
+    }catch(e){
+      emit(TransactionFailure("Error Occured"));
+    }
+  }
+}

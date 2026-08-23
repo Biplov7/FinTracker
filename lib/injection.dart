@@ -13,6 +13,8 @@ import 'package:ecommerce/domain/authentication/usecases/signout_usecase.dart';
 import 'package:ecommerce/domain/authentication/usecases/signup_usecase.dart';
 import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
 import 'package:ecommerce/domain/dashboard/usecases/getdashboarddata_usecase.dart';
+import 'package:ecommerce/domain/dashboard/usecases/getrecenttransaction_usecase.dart';
+import 'package:ecommerce/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
 import 'package:ecommerce/domain/transaction/usecases/setbudget_usecase.dart';
 import 'package:ecommerce/domain/transaction/repositories/transaction_repositories.dart';
 import 'package:ecommerce/domain/transaction/usecases/addexpense_usecase.dart';
@@ -57,9 +59,19 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetdashboarddataUsecase(sl()));
 
+  sl.registerLazySingleton(() => GetrecenttransactionUsecase(sl()));
+
+  sl.registerLazySingleton(() => UpdatedashboarddataUsecase(sl()));
+
   sl.registerLazySingleton(() => SetBudgetUsecase(sl()));
 
-  sl.registerFactory(() => DashboardBloc(getdashboarddataUsecase: sl()));
+  sl.registerFactory(
+    () => DashboardBloc(
+      getdashboarddataUsecase: sl(),
+      getrecenttransactionUsecase: sl(),
+      updatedashboarddataUsecase: sl(),
+    ),
+  );
 
   sl.registerLazySingleton(
     () => TransactionDatasource(firebaseStore, firebaseAuth),
@@ -77,6 +89,7 @@ Future<void> init() async {
       addexpenseUsecase: sl(),
       addincomeUsecase: sl(),
       setBudgetUsecase: sl(),
+      updatedashboarddataUsecase: sl()
     ),
   );
 }

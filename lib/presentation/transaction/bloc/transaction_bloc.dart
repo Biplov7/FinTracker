@@ -1,3 +1,4 @@
+import 'package:ecommerce/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
 import 'package:ecommerce/domain/transaction/usecases/addexpense_usecase.dart';
 import 'package:ecommerce/domain/transaction/usecases/addincome_usecase.dart';
 import 'package:ecommerce/domain/transaction/usecases/setbudget_usecase.dart';
@@ -9,11 +10,12 @@ class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
   final AddexpenseUsecase addexpenseUsecase;
   final AddincomeUsecase addincomeUsecase;
   final SetBudgetUsecase setBudgetUsecase;
-
+  final UpdatedashboarddataUsecase updatedashboarddataUsecase;
   TransactionBloc({
     required this.addexpenseUsecase,
     required this.addincomeUsecase,
     required this.setBudgetUsecase,
+    required this.updatedashboarddataUsecase
   }):super(TransactionInitial()){
     on<AddExpenseEvent>(_addExpenseEvent);
     on<AddIncomeEvent>(_addIncomeEvent);
@@ -24,7 +26,8 @@ class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
     try{
       emit(TransactionLoading());
       await addexpenseUsecase(event.entity);
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await updatedashboarddataUsecase();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       emit(TransactionSuccess("Expense Added Successfully"));
     }catch(e){
       emit(TransactionFailure("Error Occured"));
@@ -35,7 +38,8 @@ class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
     try{
       emit(TransactionLoading());
       await addincomeUsecase(event.entity);
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await updatedashboarddataUsecase();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       emit(TransactionSuccess("Income Added Successfully"));
     }catch(e){
       emit(TransactionFailure("Error Occured"));
@@ -46,7 +50,8 @@ class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
     try{
       emit(TransactionLoading());
       await setBudgetUsecase(event.budgetLimit);
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await updatedashboarddataUsecase();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       emit(TransactionSuccess("Budget Limit Set Successfully"));
     }catch(e){
       emit(TransactionFailure("Error Occurred"));

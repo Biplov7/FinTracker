@@ -136,13 +136,14 @@ class Getdashboarddata {
     if (uid == null) {
       throw StateError("No user is signed in");
     }
-    final snapshot = await incomeCollection(uid).where('source',isEqualTo: 'savingAccount').get();
+    final snapshot = await incomeCollection(
+      uid,
+    ).where('source', isEqualTo: 'savingAccount').get();
 
     return snapshot.docs.map((income) {
-      return IncomeModel.fromMap({...income.data(), 'id': income.id});      
-    },).toList();
+      return IncomeModel.fromMap({...income.data(), 'id': income.id});
+    }).toList();
   }
-
 
   Future<DashboardModel> calculateDashboard() async {
     final uid = firebaseAuth.currentUser?.uid;
@@ -154,7 +155,10 @@ class Getdashboarddata {
     final expenses = await getAllExpense();
     final savingIncome = await getAllSavingIncome();
 
-    final totalSaving = savingIncome.fold<double>(0.0, (double sum,IncomeModel income) => sum+income.amount,);
+    final totalSaving = savingIncome.fold<double>(
+      0.0,
+      (double sum, IncomeModel income) => sum + income.amount,
+    );
     final totalIncome = income.fold<double>(
       0.0,
       (double sum, IncomeModel income) => sum + income.amount,
@@ -170,9 +174,9 @@ class Getdashboarddata {
       uid,
     ).doc('summary').get();
     final budgetLimit =
-        (dashbaordsnapshot.data()?['budgetLimit'] ?? 0.0) as double;
+        (dashbaordsnapshot.data()?['budgetLimit'] as num?)?.toDouble() ?? 0.0;
 
-    return DashboardModel(
+    final dashboarddata = DashboardModel(
       currentBalance,
       totalIncome,
       totalExpense,
@@ -180,5 +184,10 @@ class Getdashboarddata {
       budgetUsed,
       budgetLimit,
     );
+    await dashboardCollection(
+      uid,
+    ).doc('summary').set(dashboarddata.toMap(), SetOptions(merge: true));
+
+    return dashboarddata;
   }
 }

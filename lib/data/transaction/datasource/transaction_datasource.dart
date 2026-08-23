@@ -26,31 +26,35 @@ class TransactionDatasource {
   CollectionReference<Map<String, dynamic>> get income =>
       firestore.collection('income');
 
-  DocumentReference<Map<String, dynamic>> userDoc() {
+  DocumentReference<Map<String, dynamic>> userDoc(String uid) {
     return user.doc(uid);
   }
 
-  CollectionReference<Map<String, dynamic>> expenseCollection() {
-    return userDoc().collection("expense");
+  CollectionReference<Map<String, dynamic>> expenseCollection(String uid) {
+    return userDoc(uid).collection("expense");
   }
 
-  CollectionReference<Map<String, dynamic>> incomeCollection() {
-    return userDoc().collection("income");
+  CollectionReference<Map<String, dynamic>> incomeCollection(String uid) {
+    return userDoc(uid).collection("income");
+  }
+
+  CollectionReference<Map<String, dynamic>> dashboardCollection(String uid) {
+    return userDoc(uid).collection('dashboard');
   }
 
   Future<void> addIncome(IncomeModel income) async {
-    final document = incomeCollection().doc();
-    await document.set({
-      ...income.toMap(),
-      'id': document.id,
-    });
+    final document = incomeCollection(uid).doc();
+    await document.set({...income.toMap(), 'id': document.id});
   }
 
   Future<void> addExpense(ExpenseModel expense) async {
-    final document = expenseCollection().doc();
-    await document.set({
-      ...expense.toMap(),
-      'id': document.id,
-    });
+    final document = expenseCollection(uid).doc();
+    await document.set({...expense.toMap(), 'id': document.id});
+  }
+
+  Future<void> updateBudgetLimit(double budgetLimit) async {
+    await dashboardCollection(
+      uid,
+    ).doc('summary').set({'budgetLimit': budgetLimit}, SetOptions(merge: true));
   }
 }

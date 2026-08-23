@@ -1,7 +1,7 @@
-import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
+import 'package:ecommerce/domain/transaction/repositories/transaction_repositories.dart';
 
 class SetBudgetUsecase {
-  final DashboardRepo repo;
+  final TransactionRepositories repo;
 
   SetBudgetUsecase(this.repo);
 

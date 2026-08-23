@@ -33,4 +33,10 @@ class TransactionRepoImplementation implements TransactionRepositories {
     );
     await ds.addIncome(model);
   }
+
+  @override
+  Future<void> setBudgetLimit(double budgetLimit) async {
+    await ds.updateBudgetLimit(budgetLimit);
+  }
+  
 }

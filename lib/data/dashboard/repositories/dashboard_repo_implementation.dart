@@ -68,11 +68,6 @@ class DashboardRepoImplementation implements DashboardRepo {
   }
 
   @override
-  Future<void> setBudgetLimit(double budgetLimit) async {
-    await ds.updateBudgetLimit(budgetLimit);
-  }
-
-  @override
   Future<DashboardEntities> updateDashboardData() async {
     final result = await ds.calculateDashboard();
     return DashboardEntities(

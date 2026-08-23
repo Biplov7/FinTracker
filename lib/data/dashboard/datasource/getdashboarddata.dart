@@ -181,14 +181,4 @@ class Getdashboarddata {
       budgetLimit,
     );
   }
-
-  Future<void> updateBudgetLimit(double budgetLimit) async {
-    final uid = firebaseAuth.currentUser?.uid;
-    if (uid == null) {
-      throw StateError('No user is signed in.');
-    }
-    await dashboardCollection(
-      uid,
-    ).doc('summary').set({'budgetLimit': budgetLimit}, SetOptions(merge: true));
-  }
 }

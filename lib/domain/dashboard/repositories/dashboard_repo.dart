@@ -10,6 +10,5 @@ abstract class DashboardRepo {
   });
 
   Future<List<RecentTransactionEntity>> getRecentTransaction();
-  Future<void> setBudgetLimit(double budgetLimit);
   Future<DashboardEntities> updateDashboardData();
 }

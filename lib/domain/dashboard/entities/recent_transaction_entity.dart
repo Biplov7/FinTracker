@@ -4,14 +4,12 @@ class RecentTransactionEntity {
   final String id;
   final TransactionType type;
   final double amount;
-  final String category;
   final DateTime date;
 
   RecentTransactionEntity(
     this.id,
     this.type,
     this.amount,
-    this.category,
     this.date,
   );
 
@@ -26,7 +24,6 @@ class RecentTransactionEntity {
       id ?? this.id,
       type ?? this.type,
       amount ?? this.amount,
-      category ?? this.category,
       date ?? this.date,
     );
   }

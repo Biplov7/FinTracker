@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/authentication/model/user_model.dart';
 import 'package:ecommerce/data/dashboard/model/dashboard_model.dart';
+import 'package:ecommerce/data/transaction/model/expense_model.dart';
+import 'package:ecommerce/data/transaction/model/income_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Getdashboarddata {
@@ -30,6 +32,14 @@ class Getdashboarddata {
     return userDoc(uid).collection('profile');
   }
 
+  CollectionReference<Map<String, dynamic>> expenseCollection(String uid) {
+    return userDoc(uid).collection('expense');
+  }
+
+  CollectionReference<Map<String, dynamic>> incomeCollection(String uid) {
+    return userDoc(uid).collection('income');
+  }
+
   Future<DashboardModel> getDashboardData() async {
     final uid = firebaseAuth.currentUser?.uid;
     if (uid == null) {
@@ -52,5 +62,133 @@ class Getdashboarddata {
     await dashboardCollection(
       uid,
     ).doc('summary').set(dashboard.toMap(), SetOptions(merge: true));
+  }
+
+  Future<List<ExpenseModel>> getAllModel() async {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError('No user is signed in');
+    }
+    final snapshot = await expenseCollection(
+      uid,
+    ).orderBy('date', descending: true).limit(5).get();
+
+    return snapshot.docs.map((doc) {
+      return ExpenseModel.fromMap({...doc.data(), 'id': doc.id});
+    }).toList();
+  }
+
+  Future<List<IncomeModel>> getFirstFiveIncome() async {
+    final uid = firebaseAuth.currentUser?.uid;
+
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    final snapshot = await incomeCollection(
+      uid,
+    ).orderBy('date', descending: true).limit(5).get();
+    return snapshot.docs.map((e) {
+      return IncomeModel.fromMap({...e.data(), 'id': e.id});
+    }).toList();
+  }
+
+  Future<List<ExpenseModel>> getFirstFiveExpense() async {
+    final uid = firebaseAuth.currentUser?.uid;
+
+    if (uid == null) {
+      throw StateError('No user is signed in');
+    }
+    final snapshot = await expenseCollection(
+      uid,
+    ).orderBy('date', descending: true).limit(5).get();
+
+    return snapshot.docs.map((e) {
+      return ExpenseModel.fromMap({...e.data(), 'id': e.id});
+    }).toList();
+  }
+
+  Future<List<ExpenseModel>> getAllExpense() async {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    final snapshot = await expenseCollection(uid).get();
+
+    return snapshot.docs.map((expense) {
+      return ExpenseModel.fromMap({...expense.data(), "id": expense.id});
+    }).toList();
+  }
+
+  Future<List<IncomeModel>> getAllIncome() async {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    final snapshot = await incomeCollection(uid).get();
+
+    return snapshot.docs.map((income) {
+      return IncomeModel.fromMap({...income.data(), "id": income.id});
+    }).toList();
+  }
+
+  Future<List<IncomeModel>> getAllSavingIncome() async {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    final snapshot = await incomeCollection(uid).where('source',isEqualTo: 'savingAccount').get();
+
+    return snapshot.docs.map((income) {
+      return IncomeModel.fromMap({...income.data(), 'id': income.id});      
+    },).toList();
+  }
+
+
+  Future<DashboardModel> calculateDashboard() async {
+    final uid = firebaseAuth.currentUser?.uid;
+
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    final income = await getAllIncome();
+    final expenses = await getAllExpense();
+    final savingIncome = await getAllSavingIncome();
+
+    final totalSaving = savingIncome.fold<double>(0.0, (double sum,IncomeModel income) => sum+income.amount,);
+    final totalIncome = income.fold<double>(
+      0.0,
+      (double sum, IncomeModel income) => sum + income.amount,
+    );
+    final totalExpense = expenses.fold<double>(
+      0.0,
+      (double sum, ExpenseModel expense) => sum + expense.amount,
+    );
+
+    final currentBalance = totalIncome - totalExpense;
+    final budgetUsed = totalExpense;
+    final dashbaordsnapshot = await dashboardCollection(
+      uid,
+    ).doc('summary').get();
+    final budgetLimit =
+        (dashbaordsnapshot.data()?['budgetLimit'] ?? 0.0) as double;
+
+    return DashboardModel(
+      currentBalance,
+      totalIncome,
+      totalExpense,
+      totalSaving,
+      budgetUsed,
+      budgetLimit,
+    );
+  }
+
+  Future<void> updateBudgetLimit(double budgetLimit) async {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError('No user is signed in.');
+    }
+    await dashboardCollection(
+      uid,
+    ).doc('summary').set({'budgetLimit': budgetLimit}, SetOptions(merge: true));
   }
 }

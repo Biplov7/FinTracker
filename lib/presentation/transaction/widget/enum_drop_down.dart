@@ -32,13 +32,13 @@ class _EnumDropDownState<T extends Enum> extends State<EnumDropDown<T>> {
       initialValue: widget.value,
       decoration: InputDecoration(
         hintText: widget.labelText,
-        prefixIcon: widget.prefixIcon,
-
+        prefixIcon: widget.value != null && widget.itemIcon != null
+            ? Icon(widget.itemIcon!(widget.value as T), color: widget.iconColor)
+            : widget.prefixIcon,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
-
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.medium),
           borderSide: const BorderSide(color: Colors.black),
@@ -48,19 +48,10 @@ class _EnumDropDownState<T extends Enum> extends State<EnumDropDown<T>> {
           borderSide: const BorderSide(color: Colors.black),
         ),
       ),
-
       items: widget.item.map((item) {
         return DropdownMenuItem<T>(
           value: item,
-          child: Row(
-            children: [
-              if (widget.itemIcon != null) ...[
-                Icon(widget.itemIcon!(item), color: widget.iconColor),
-                const SizedBox(width: 12),
-              ],
-              Text(formatName(item.name)),
-            ],
-          ),
+          child: Text(formatName(item.name)),
         );
       }).toList(),
       onChanged: widget.onChanged,

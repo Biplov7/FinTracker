@@ -13,6 +13,7 @@ import 'package:ecommerce/domain/authentication/usecases/signout_usecase.dart';
 import 'package:ecommerce/domain/authentication/usecases/signup_usecase.dart';
 import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
 import 'package:ecommerce/domain/dashboard/usecases/getdashboarddata_usecase.dart';
+import 'package:ecommerce/domain/dashboard/usecases/setbudget_usecase.dart';
 import 'package:ecommerce/domain/transaction/repositories/transaction_repositories.dart';
 import 'package:ecommerce/domain/transaction/usecases/addexpense_usecase.dart';
 import 'package:ecommerce/domain/transaction/usecases/addincome_usecase.dart';
@@ -56,6 +57,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetdashboarddataUsecase(sl()));
 
+  sl.registerLazySingleton(() => SetBudgetUsecase(sl()));
+
   sl.registerFactory(() => DashboardBloc(getdashboarddataUsecase: sl()));
 
   sl.registerLazySingleton(
@@ -70,6 +73,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddincomeUsecase(sl()));
 
   sl.registerFactory(
-    () => TransactionBloc(addexpenseUsecase: sl(), addincomeUsecase: sl()),
+    () => TransactionBloc(
+      addexpenseUsecase: sl(),
+      addincomeUsecase: sl(),
+      setBudgetUsecase: sl(),
+    ),
   );
 }

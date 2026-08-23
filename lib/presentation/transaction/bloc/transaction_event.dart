@@ -15,3 +15,8 @@ class AddExpenseEvent extends TransactionEvent{
   final ExpenseEntity entity;
   AddExpenseEvent(this.entity);
 }
+
+class AddBudgetEvent extends TransactionEvent{
+  final double budgetLimit;
+  AddBudgetEvent(this.budgetLimit);
+}

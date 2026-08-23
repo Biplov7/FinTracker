@@ -2,12 +2,13 @@ import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_radius.dart';
 import 'package:ecommerce/presentation/transaction/widget/expense_form.dart';
 import 'package:ecommerce/presentation/transaction/widget/income_form.dart';
+import 'package:ecommerce/presentation/transaction/widget/budget_form.dart';
 import 'package:ecommerce/presentation/transaction/bloc/transaction_bloc.dart';
 import 'package:ecommerce/presentation/transaction/bloc/transaction_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum TransactionType { expense, income }
+enum TransactionType { expense, income, budget }
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({super.key});
@@ -106,6 +107,36 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           ),
                         ),
                       ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedType = TransactionType.budget;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: selectedType == TransactionType.budget
+                                  ? AppColors.primary
+                                  : AppColors.transp,
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Budget",
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          selectedType == TransactionType.budget
+                                          ? AppColors.card
+                                          : DarkTheme.darkbackground,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -113,7 +144,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
                     selectedType == TransactionType.income
                         ? IncomeForm()
-                        : ExpenseForm(),
+                        : selectedType == TransactionType.budget
+                            ? BudgetForm()
+                            : ExpenseForm(),
                   ],
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:ecommerce/domain/dashboard/entities/dashboard_entities.dart';
+import 'package:ecommerce/domain/dashboard/entities/recent_transaction_entity.dart';
 
 abstract class DashboardRepo {
   Future<DashboardEntities> getDashboardData();
@@ -7,4 +8,8 @@ abstract class DashboardRepo {
     required String username,
     required String email,
   });
+
+  Future<List<RecentTransactionEntity>> getRecentTransaction();
+  Future<void> setBudgetLimit(double budgetLimit);
+  Future<DashboardEntities> updateDashboardData();
 }

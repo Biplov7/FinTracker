@@ -13,6 +13,7 @@ import 'package:ecommerce/domain/authentication/usecases/signout_usecase.dart';
 import 'package:ecommerce/domain/authentication/usecases/signup_usecase.dart';
 import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
 import 'package:ecommerce/domain/dashboard/usecases/getdashboarddata_usecase.dart';
+import 'package:ecommerce/domain/dashboard/usecases/getuserprofile_usecase.dart';
 import 'package:ecommerce/domain/dashboard/usecases/getrecenttransaction_usecase.dart';
 import 'package:ecommerce/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
 import 'package:ecommerce/domain/transaction/usecases/setbudget_usecase.dart';
@@ -59,6 +60,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetdashboarddataUsecase(sl()));
 
+  sl.registerLazySingleton(() => GetUserProfileUseCase(sl()));
+
   sl.registerLazySingleton(() => GetrecenttransactionUsecase(sl()));
 
   sl.registerLazySingleton(() => UpdatedashboarddataUsecase(sl()));
@@ -70,6 +73,7 @@ Future<void> init() async {
       getdashboarddataUsecase: sl(),
       getrecenttransactionUsecase: sl(),
       updatedashboarddataUsecase: sl(),
+      getUserProfileUseCase: sl(),
     ),
   );
 

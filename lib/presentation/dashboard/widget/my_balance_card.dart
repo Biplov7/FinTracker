@@ -1,10 +1,11 @@
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
+import 'package:ecommerce/core/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
 
 class MyBalanceCard extends StatefulWidget {
-
-  const MyBalanceCard({super.key});
+  final double currentBalance;
+  const MyBalanceCard({super.key,required this.currentBalance});
 
   @override
   State<MyBalanceCard> createState() => _MyBalanceCardState();
@@ -42,7 +43,7 @@ class _MyBalanceCardState extends State<MyBalanceCard> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  isVisible ? "\$ 12,400.00" : "XXX.XX",
+                  isVisible ? formatCurrency(widget.currentBalance) : "XXX.XX",
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 const SizedBox(height: 6),

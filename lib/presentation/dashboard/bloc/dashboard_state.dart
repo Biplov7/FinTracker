@@ -10,7 +10,8 @@ class DashboardLoading extends DashboardState{}
 
 class DashboardSuccess extends DashboardState{
   final DashboardEntities entity;
-  DashboardSuccess(this.entity);
+  final String userName;
+  DashboardSuccess(this.entity, this.userName);
 }
 
 class DashboardFailure extends DashboardState{

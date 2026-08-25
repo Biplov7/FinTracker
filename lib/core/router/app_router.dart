@@ -1,12 +1,13 @@
 import 'package:ecommerce/core/router/app_name.dart';
+import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:ecommerce/presentation/dashboard/screen/dashboard.dart';
 import 'package:ecommerce/presentation/authentication/srceen/login.dart';
 import 'package:ecommerce/presentation/authentication/srceen/signup.dart';
 import 'package:ecommerce/presentation/authentication/srceen/splash.dart';
 import 'package:ecommerce/presentation/transaction/screen/add_transaction_screen.dart';
 import 'package:ecommerce/injection.dart' as di;
-  import 'package:ecommerce/presentation/transaction/bloc/transaction_bloc.dart';
-  import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce/presentation/transaction/bloc/transaction_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -39,7 +40,10 @@ class AppRouter {
         path: '/home',
         name: AppName.homeName,
         builder: (context, state) {
-          return Dashboard();
+          return BlocProvider(
+            create: (context) => di.sl<DashboardBloc>(),
+            child: Dashboard(),
+          );
         },
       ),
       GoRoute(

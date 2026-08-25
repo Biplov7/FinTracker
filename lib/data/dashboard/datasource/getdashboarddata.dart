@@ -55,6 +55,15 @@ class Getdashboarddata {
     ).doc('detail').set(user.toMap(), SetOptions(merge: true));
   }
 
+  Future<UserModel> getUserProfile() async {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError('No user is signed in.');
+    }
+    final snapshot = await profileCollection(uid).doc('detail').get();
+    return UserModel.fromMap(snapshot.data()!);
+  }
+
   Future<void> createDefaultDashboard(
     String uid,
     DashboardModel dashboard,
@@ -190,4 +199,6 @@ class Getdashboarddata {
 
     return dashboarddata;
   }
+
+
 }

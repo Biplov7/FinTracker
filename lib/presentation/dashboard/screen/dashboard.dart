@@ -1,6 +1,11 @@
 import 'package:ecommerce/core/router/app_name.dart';
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
+import 'package:ecommerce/core/utils/currency_formatter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:ecommerce/presentation/dashboard/bloc/dashboard_event.dart';
+import 'package:ecommerce/presentation/dashboard/bloc/dashboard_state.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_balance_card.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_budget_progress.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_recent_transaction.dart';
@@ -18,6 +23,13 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int selectedValue = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<DashboardBloc>().add(LoadDashboard());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,58 +96,84 @@ class _DashboardState extends State<Dashboard> {
         child: Icon(Icons.add),
       ),
       backgroundColor: AppColors.primary,
-      body: Stack(
-        children: [
-          _buildBackground(),
-          SafeArea(
-            bottom: false,
-            child: Column(
+      body: BlocConsumer<DashboardBloc, DashboardState>(
+        listener: (context, state) {
+          if (state is DashboardFailure) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
+          }
+        },
+        builder: (context, state) {
+          if (state is DashboardLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is DashboardSuccess) {
+            return Stack(
               children: [
-                _notificationSection(context),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(14, 0, 14, 110),
-                    child: Column(
-                      children: [
-                        MyBalanceCard(),
-                        const SizedBox(height: AppSpacing.md),
-                        statCard(),
-                        const SizedBox(height: AppSpacing.md),
-                        MyBudgetProgress(),
-                        const SizedBox(height: AppSpacing.md),
-                        MyRecentTransaction(),
-                      ],
-                    ),
+                _buildBackground(),
+                SafeArea(
+                  bottom: false,
+                  child: Column(
+                    children: [
+                      _notificationSection(context, state.userName),
+                      const SizedBox(height: 20),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.fromLTRB(14, 0, 14, 110),
+                          child: Column(
+                            children: [
+                              MyBalanceCard(
+                                currentBalance: state.entity.currentBalance,
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              statCard(
+                                state.entity.totalIncome,
+                                state.entity.totalExpenses,
+                                state.entity.totalSaving,
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              MyBudgetProgress(
+                                budgetLimit: state.entity.budgetLimit,
+                                budgetUsed: state.entity.budgetUsed,
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              MyRecentTransaction(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
+            );
+          }
+          return SizedBox();
+        },
       ),
     );
   }
 
-  Row statCard() {
+  Row statCard(double totalIncome, double totalExpense, double totalSaving) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         MyStatCard(
           label: "Income",
-          amount: "\$ 12,000.00",
+          amount: formatCurrency(totalIncome),
           color: AppColors.success,
           icon: Icons.account_balance,
         ),
         MyStatCard(
           label: "Expense",
-          amount: "\$ 12,000.00",
+          amount: formatCurrency(totalExpense),
           color: AppColors.danger,
           icon: Icons.wallet_outlined,
         ),
         MyStatCard(
-          label: "Income",
-          amount: "\$ 12,000.00",
+          label: "Saving",
+          amount: formatCurrency(totalSaving),
           color: AppColors.textPrimary,
           icon: Icons.savings_outlined,
         ),
@@ -143,7 +181,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Padding _notificationSection(BuildContext context) {
+  Padding _notificationSection(BuildContext context, String userName) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
       child: Row(
@@ -160,7 +198,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               Text(
-                "Biplov Khanal",
+                userName,
                 style: Theme.of(
                   context,
                 ).textTheme.headlineMedium?.copyWith(color: AppColors.card),

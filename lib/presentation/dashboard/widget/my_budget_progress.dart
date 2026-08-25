@@ -1,11 +1,18 @@
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
+import 'package:ecommerce/core/utils/currency_formatter.dart';
 import 'package:ecommerce/presentation/authentication/widget/my_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MyBudgetProgress extends StatefulWidget {
-  const MyBudgetProgress({super.key});
+  final double budgetLimit;
+  final double budgetUsed;
+  const MyBudgetProgress({
+    super.key,
+    required this.budgetLimit,
+    required this.budgetUsed,
+  });
 
   @override
   State<MyBudgetProgress> createState() => _MyBudgetProgressState();
@@ -77,12 +84,12 @@ class _MyBudgetProgressState extends State<MyBudgetProgress> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "\$4,000 used",
+                            "${formatCurrency(widget.budgetUsed)} used",
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(color: AppColors.textSecondary),
                           ),
                           Text(
-                            "\$1,000 left",
+                            "${formatCurrency(widget.budgetLimit)} left",
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(color: AppColors.textSecondary),
                           ),

@@ -4,6 +4,7 @@ import 'package:ecommerce/data/dashboard/model/dashboard_model.dart';
 import 'package:ecommerce/data/dashboard/model/recent_transaction_model.dart';
 import 'package:ecommerce/data/transaction/model/expense_model.dart';
 import 'package:ecommerce/data/transaction/model/income_model.dart';
+import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
 import 'package:ecommerce/domain/dashboard/entities/dashboard_entities.dart';
 import 'package:ecommerce/domain/dashboard/entities/recent_transaction_entity.dart';
 import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
@@ -43,28 +44,17 @@ class DashboardRepoImplementation implements DashboardRepo {
     List<IncomeModel> firstFiveIncome = await ds.getFirstFiveIncome();
     List<ExpenseModel> firstFiveExpense = await ds.getFirstFiveExpense();
 
-    final incomeTransaction = firstFiveIncome.map((income) {
-      return RecentTransactionModel(
-        income.id,
-        TransactionType.income,
-        income.amount,
-        income.date,
-      );
-    });
+    final income = firstFiveIncome.map((income)=> RecentTransactionModel(income.id, TransactionType.income, income.category.name, income.amount, income.date)).toList();
+    final expense = firstFiveExpense.map((expense)=> RecentTransactionModel(expense.id, TransactionType.expense, expense.category.name, expense.amount, expense.date)).toList();
 
-    final expenseTransaction = firstFiveExpense.map((expense) {
-      return RecentTransactionModel(
-        expense.id,
-        TransactionType.expense,
-        expense.amount,
-        expense.date,
-      );
-    });
+    final result = [
+      ...income ,
+      ...expense
+    ];
 
-    final transaction = [...incomeTransaction, ...expenseTransaction];
-    transaction.sort((a, b) => b.date.compareTo(a.date));
-
-    return transaction;
+    result.sort((a, b) => b.date.compareTo(a.date),);
+    final transaction = result.take(5).toList();
+    return transaction; 
   }
 
   @override
@@ -77,6 +67,16 @@ class DashboardRepoImplementation implements DashboardRepo {
       result.totalSaving,
       result.budgetUsed,
       result.budgetLimit,
+    );
+  }
+
+  @override
+  Future<UserEntity> getUserProfile() async {
+    final result = await ds.getUserProfile();
+    return UserEntity(
+      id: result.id,
+      username: result.username,
+      email: result.email,
     );
   }
 }

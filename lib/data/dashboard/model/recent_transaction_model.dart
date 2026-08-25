@@ -5,6 +5,7 @@ class RecentTransactionModel extends RecentTransactionEntity {
   RecentTransactionModel(
     super.id,
     super.type,
+    super.category,
     super.amount,
     super.date,
   );
@@ -13,6 +14,7 @@ class RecentTransactionModel extends RecentTransactionEntity {
     return RecentTransactionModel(
       map['id'] as String,
       map['type'] as TransactionType,
+      map['category'] as String,
       (map['amount'] as num).toDouble(),
       DateTime.parse(map['date'] as String),
     );
@@ -22,6 +24,7 @@ class RecentTransactionModel extends RecentTransactionEntity {
     return {
       'id': id,
       'type': type,
+      'category': category,
       'amount': amount,
       'date': date.toString(),
     };

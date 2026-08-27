@@ -24,7 +24,19 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.dark(),
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      surface: DarkTheme.card,
+    ),
     scaffoldBackgroundColor: DarkTheme.darkbackground,
+    textTheme: AppTextStyles.textTheme,
+    appBarTheme: AppBarTheme(),
+    elevatedButtonTheme: ElevatedButtonThemeData(),
+    inputDecorationTheme: InputDecorationTheme(),
+    cardTheme: CardThemeData(),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(),
+    dividerTheme: DividerThemeData(),
   );
 }

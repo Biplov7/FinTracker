@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/data/authentication/model/user_model.dart';
 import 'package:ecommerce/data/dashboard/model/dashboard_model.dart';
@@ -93,9 +94,10 @@ class Getdashboarddata {
     if (uid == null) {
       throw StateError("No user is signed in");
     }
-    final snapshot = await incomeCollection(
-      uid,
-    ).orderBy('date', descending: true).limit(5).get();
+    final snapshot = await incomeCollection(uid)
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .get();
     return snapshot.docs.map((e) {
       return IncomeModel.fromMap({...e.data(), 'id': e.id});
     }).toList();
@@ -107,9 +109,10 @@ class Getdashboarddata {
     if (uid == null) {
       throw StateError('No user is signed in');
     }
-    final snapshot = await expenseCollection(
-      uid,
-    ).orderBy('date', descending: true).limit(5).get();
+    final snapshot = await expenseCollection(uid)
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .get();
 
     return snapshot.docs.map((e) {
       return ExpenseModel.fromMap({...e.data(), 'id': e.id});
@@ -152,6 +155,106 @@ class Getdashboarddata {
     return snapshot.docs.map((income) {
       return IncomeModel.fromMap({...income.data(), 'id': income.id});
     }).toList();
+  }
+
+  // Realtime streams for dashboard updates
+  Stream<DashboardModel> streamDashboardData() {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError('No user is signed in.');
+    }
+    return dashboardCollection(uid)
+        .doc('summary')
+        .snapshots()
+        .map((snapshot) => DashboardModel.fromMap(snapshot.data()!));
+  }
+
+  Stream<List<ExpenseModel>> streamRecentExpenses() {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    return expenseCollection(uid)
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              return ExpenseModel.fromMap({...doc.data(), 'id': doc.id});
+            }).toList());
+  }
+
+  Stream<List<IncomeModel>> streamRecentIncome() {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+    return incomeCollection(uid)
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              return IncomeModel.fromMap({...doc.data(), 'id': doc.id});
+            }).toList());
+  }
+
+  Stream<List<dynamic>> streamRecentTransactions() {
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      throw StateError("No user is signed in");
+    }
+
+    final controller = StreamController<List<dynamic>>();
+
+    // Listen to both collections
+    final expenseSnapshotStream = expenseCollection(
+      uid,
+    ).orderBy('date', descending: true).limit(5).snapshots();
+
+    final incomeSnapshotStream = incomeCollection(
+      uid,
+    ).orderBy('date', descending: true).limit(5).snapshots();
+
+    List<ExpenseModel>? latestExpenses;
+    List<IncomeModel>? latestIncomes;
+
+    final expenseSubscription = expenseSnapshotStream.listen(
+      (expenseSnapshot) {
+        latestExpenses = expenseSnapshot.docs.map((doc) {
+          return ExpenseModel.fromMap({...doc.data(), 'id': doc.id});
+        }).toList();
+
+        if (latestExpenses != null && latestIncomes != null) {
+          final combined = [...latestExpenses!, ...latestIncomes!];
+          controller.add(combined);
+        }
+      },
+      onError: (error) {
+        controller.addError(error);
+      },
+    );
+
+    final incomeSubscription = incomeSnapshotStream.listen(
+      (incomeSnapshot) {
+        latestIncomes = incomeSnapshot.docs.map((doc) {
+          return IncomeModel.fromMap({...doc.data(), 'id': doc.id});
+        }).toList();
+
+        if (latestExpenses != null && latestIncomes != null) {
+          final combined = [...latestExpenses!, ...latestIncomes!];
+          controller.add(combined);
+        }
+      },
+      onError: (error) {
+        controller.addError(error);
+      },
+    );
+
+    controller.onCancel = () {
+      expenseSubscription.cancel();
+      incomeSubscription.cancel();
+    };
+
+    return controller.stream;
   }
 
   Future<DashboardModel> calculateDashboard() async {
@@ -199,6 +302,4 @@ class Getdashboarddata {
 
     return dashboarddata;
   }
-
-
 }

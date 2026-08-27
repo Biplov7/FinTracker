@@ -41,20 +41,38 @@ class DashboardRepoImplementation implements DashboardRepo {
 
   @override
   Future<List<RecentTransactionEntity>> getRecentTransaction() async {
-    List<IncomeModel> firstFiveIncome = await ds.getFirstFiveIncome();
-    List<ExpenseModel> firstFiveExpense = await ds.getFirstFiveExpense();
+    // Run both queries in parallel instead of sequentially
+    final results = await Future.wait([
+      ds.getFirstFiveIncome(),
+      ds.getFirstFiveExpense(),
+    ]);
 
-    final income = firstFiveIncome.map((income)=> RecentTransactionModel(income.id, TransactionType.income, income.category.name, income.amount, income.date)).toList();
-    final expense = firstFiveExpense.map((expense)=> RecentTransactionModel(expense.id, TransactionType.expense, expense.category.name, expense.amount, expense.date)).toList();
+    final firstFiveIncome = results[0] as List<IncomeModel>;
+    final firstFiveExpense = results[1] as List<ExpenseModel>;
 
-    final result = [
-      ...income ,
-      ...expense
-    ];
+    final income = firstFiveIncome
+        .map((income) => RecentTransactionModel(
+              income.id,
+              TransactionType.income,
+              income.category.name,
+              income.amount,
+              income.date,
+            ))
+        .toList();
+    final expense = firstFiveExpense
+        .map((expense) => RecentTransactionModel(
+              expense.id,
+              TransactionType.expense,
+              expense.category.name,
+              expense.amount,
+              expense.date,
+            ))
+        .toList();
 
-    result.sort((a, b) => b.date.compareTo(a.date),);
+    final result = [...income, ...expense];
+    result.sort((a, b) => b.date.compareTo(a.date));
     final transaction = result.take(5).toList();
-    return transaction; 
+    return transaction;
   }
 
   @override
@@ -78,5 +96,46 @@ class DashboardRepoImplementation implements DashboardRepo {
       username: result.username,
       email: result.email,
     );
+  }
+
+  @override
+  Stream<DashboardEntities> streamDashboardData() {
+    return ds.streamDashboardData().map((model) => DashboardEntities(
+          model.currentBalance,
+          model.totalIncome,
+          model.totalExpenses,
+          model.totalSaving,
+          model.budgetUsed,
+          model.budgetLimit,
+        ));
+  }
+
+  @override
+  Stream<List<RecentTransactionEntity>> streamRecentTransactions() {
+    return ds.streamRecentTransactions().map((transactions) {
+      List<IncomeModel> incomes = [];
+      List<ExpenseModel> expenses = [];
+
+      for (var transaction in transactions) {
+        if (transaction is IncomeModel) {
+          incomes.add(transaction);
+        } else if (transaction is ExpenseModel) {
+          expenses.add(transaction);
+        }
+      }
+
+      final income = incomes
+          .map((inc) => RecentTransactionModel(
+              inc.id, TransactionType.income, inc.category.name, inc.amount, inc.date))
+          .toList();
+      final expense = expenses
+          .map((exp) => RecentTransactionModel(
+              exp.id, TransactionType.expense, exp.category.name, exp.amount, exp.date))
+          .toList();
+
+      final result = [...income, ...expense];
+      result.sort((a, b) => b.date.compareTo(a.date));
+      return result.take(5).toList();
+    });
   }
 }

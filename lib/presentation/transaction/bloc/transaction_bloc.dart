@@ -23,13 +23,24 @@ class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
   }
 
   void _addExpenseEvent(AddExpenseEvent event, Emitter<TransactionState> emit) async {
-    try{
+    try {
       emit(TransactionLoading());
+
+      // Get current balance to check if expense exceeds it
+      final dashboardData = await updatedashboarddataUsecase();
+
+      if (event.entity.amount > dashboardData.currentBalance) {
+        emit(TransactionFailure(
+          "Expense exceeds your current balance of \$${dashboardData.currentBalance.toStringAsFixed(2)}",
+        ));
+        return;
+      }
+
       await addexpenseUsecase(event.entity);
       await updatedashboarddataUsecase();
       await Future<void>.delayed(const Duration(milliseconds: 100));
       emit(TransactionSuccess("Expense Added Successfully"));
-    }catch(e){
+    } catch (e) {
       emit(TransactionFailure("Error Occured"));
     }
   }

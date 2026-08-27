@@ -12,6 +12,10 @@ import 'package:go_router/go_router.dart';
 
 class AppRouter {
   AppRouter._();
+
+  // Create singleton instances to preserve state across route changes
+  static final DashboardBloc _dashboardBloc = di.sl<DashboardBloc>();
+
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
     routes: [
@@ -40,8 +44,8 @@ class AppRouter {
         path: '/home',
         name: AppName.homeName,
         builder: (context, state) {
-          return BlocProvider(
-            create: (context) => di.sl<DashboardBloc>(),
+          return BlocProvider.value(
+            value: _dashboardBloc,
             child: Dashboard(),
           );
         },

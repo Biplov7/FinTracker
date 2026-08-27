@@ -2,7 +2,9 @@ import 'package:ecommerce/core/router/app_name.dart';
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
 import 'package:ecommerce/core/utils/currency_formatter.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:ecommerce/presentation/dashboard/bloc/dashboard_event.dart';
 import 'package:ecommerce/presentation/dashboard/bloc/dashboard_state.dart';
@@ -10,8 +12,6 @@ import 'package:ecommerce/presentation/dashboard/widget/my_balance_card.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_budget_progress.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_recent_transaction.dart';
 import 'package:ecommerce/presentation/dashboard/widget/my_stat_card.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -21,13 +21,27 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard> with RouteAware {
   int selectedValue = 0;
 
   @override
   void initState() {
     super.initState();
     context.read<DashboardBloc>().add(LoadDashboard());
+  }
+
+  @override
+  void didPush() {
+    super.didPush();
+    // Refresh when pushed onto the navigator stack
+    context.read<DashboardBloc>().add(RefreshDashboard());
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    // Refresh when returning from another route
+    context.read<DashboardBloc>().add(RefreshDashboard());
   }
 
   @override
@@ -108,7 +122,7 @@ class _DashboardState extends State<Dashboard> {
           if (state is DashboardLoading) {
             return Center(child: CircularProgressIndicator());
           }
-          if (state is DashboardSuccess) {
+          if (state is DashboardLoaded) {
             return Stack(
               children: [
                 _buildBackground(),
@@ -124,18 +138,18 @@ class _DashboardState extends State<Dashboard> {
                           child: Column(
                             children: [
                               MyBalanceCard(
-                                currentBalance: state.entity.currentBalance,
+                                currentBalance: state.dashboard.currentBalance,
                               ),
                               const SizedBox(height: AppSpacing.md),
                               statCard(
-                                state.entity.totalIncome,
-                                state.entity.totalExpenses,
-                                state.entity.totalSaving,
+                                state.dashboard.totalIncome,
+                                state.dashboard.totalExpenses,
+                                state.dashboard.totalSaving,
                               ),
                               const SizedBox(height: AppSpacing.md),
                               MyBudgetProgress(
-                                budgetLimit: state.entity.budgetLimit,
-                                budgetUsed: state.entity.budgetUsed,
+                                budgetLimit: state.dashboard.budgetLimit,
+                                budgetUsed: state.dashboard.budgetUsed,
                               ),
                               const SizedBox(height: AppSpacing.md),
                               MyRecentTransaction(),

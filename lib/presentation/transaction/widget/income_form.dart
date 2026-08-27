@@ -1,6 +1,7 @@
 import 'package:ecommerce/core/theme/app_colors.dart';
 import 'package:ecommerce/core/theme/app_radius.dart';
 import 'package:ecommerce/core/theme/app_spacing.dart';
+import 'package:ecommerce/core/utils/form_validators.dart';
 import 'package:ecommerce/domain/transaction/entities/income_category.dart';
 import 'package:ecommerce/domain/transaction/entities/income_entity.dart';
 import 'package:ecommerce/domain/transaction/entities/income_source.dart';
@@ -23,12 +24,14 @@ class IncomeForm extends StatefulWidget {
 }
 
 class _IncomeFormState extends State<IncomeForm> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   IncomeCategory? selectedCategory;
   DateTime? _selectedDate;
   IncomeSource? source;
+  bool _isFormSubmitted = false;
 
   @override
   void dispose() {
@@ -47,6 +50,7 @@ class _IncomeFormState extends State<IncomeForm> {
       _selectedDate = null;
       source = null;
     });
+    _formKey.currentState?.reset();
   }
 
   @override
@@ -94,6 +98,7 @@ class _IncomeFormState extends State<IncomeForm> {
           return Expanded(child: Center(child: CircularProgressIndicator()));
         }
         return Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -114,20 +119,7 @@ class _IncomeFormState extends State<IncomeForm> {
                 controller: amountController,
                 label: "Enter your amount",
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validation: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter an amount";
-                  }
-                  final amount = double.tryParse(value);
-
-                  if (amount == null) {
-                    return "Enter a valid amount";
-                  }
-                  if (amount < 0) {
-                    return "Amount must be greater than 0";
-                  }
-                  return null;
-                },
+                validation: FormValidators.validateAmount,
               ),
               SizedBox(height: AppSpacing.md),
               Align(
@@ -150,8 +142,20 @@ class _IncomeFormState extends State<IncomeForm> {
                 iconColor: AppColors.success,
                 onChanged: (value) {
                   setState(() => selectedCategory = value);
+                  _formKey.currentState?.validate();
                 },
               ),
+              if (_isFormSubmitted && selectedCategory == null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+                  child: Text(
+                    FormValidators.validateCategory(selectedCategory) ?? "",
+                    style: TextStyle(
+                      color: AppColors.danger,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               SizedBox(height: AppSpacing.md),
               Align(
                 alignment: Alignment.centerLeft,
@@ -175,8 +179,20 @@ class _IncomeFormState extends State<IncomeForm> {
                   setState(() {
                     source = value;
                   });
+                  _formKey.currentState?.validate();
                 },
               ),
+              if (_isFormSubmitted && source == null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+                  child: Text(
+                    FormValidators.validateWallet(source) ?? "",
+                    style: TextStyle(
+                      color: AppColors.danger,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               SizedBox(height: AppSpacing.md),
               Align(
                 alignment: Alignment.centerLeft,
@@ -189,6 +205,7 @@ class _IncomeFormState extends State<IncomeForm> {
               TextFormField(
                 readOnly: true,
                 controller: dateController,
+                validator: FormValidators.validateDate,
                 decoration: InputDecoration(
                   hintText: "Select Date",
                   prefixIcon: const Icon(
@@ -202,6 +219,10 @@ class _IncomeFormState extends State<IncomeForm> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadius.medium),
                     borderSide: const BorderSide(color: Colors.black),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.medium),
+                    borderSide: const BorderSide(color: Color.fromARGB(255, 239, 68, 68)),
                   ),
                 ),
                 onTap: dateTime,
@@ -219,6 +240,7 @@ class _IncomeFormState extends State<IncomeForm> {
                 controller: descriptionController,
                 maxLines: 2,
                 maxLength: 100,
+                validator: FormValidators.validateDescription,
                 onChanged: (value) {
                   setState(() {});
                 },
@@ -229,10 +251,13 @@ class _IncomeFormState extends State<IncomeForm> {
                     borderRadius: BorderRadius.circular(AppRadius.medium),
                     borderSide: const BorderSide(color: Colors.black),
                   ),
-
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadius.medium),
                     borderSide: const BorderSide(color: Colors.black),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.medium),
+                    borderSide: const BorderSide(color: Color.fromARGB(255, 239, 68, 68)),
                   ),
                 ),
               ),
@@ -245,14 +270,31 @@ class _IncomeFormState extends State<IncomeForm> {
                 ),
                 child: ElevatedButton(
                   onPressed: () {
-                    final income = IncomeEntity(
-                      amount: double.parse(amountController.text),
-                      category: selectedCategory!,
-                      description: descriptionController.text,
-                      date: _selectedDate!,
-                      source: source!,
-                    );
-                    context.read<TransactionBloc>().add(AddIncomeEvent(income));
+                    setState(() {
+                      _isFormSubmitted = true;
+                    });
+
+                    if (_formKey.currentState!.validate() &&
+                        selectedCategory != null &&
+                        source != null &&
+                        _selectedDate != null) {
+                      final income = IncomeEntity(
+                        amount: double.parse(amountController.text),
+                        category: selectedCategory!,
+                        description: descriptionController.text,
+                        date: _selectedDate!,
+                        source: source!,
+                      );
+                      context.read<TransactionBloc>().add(AddIncomeEvent(income));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Please fill all required fields"),
+                          backgroundColor: AppColors.danger,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
@@ -277,3 +319,4 @@ class _IncomeFormState extends State<IncomeForm> {
     );
   }
 }
+

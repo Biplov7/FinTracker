@@ -13,4 +13,8 @@ abstract class DashboardRepo {
   Future<List<RecentTransactionEntity>> getRecentTransaction();
   Future<DashboardEntities> updateDashboardData();
   Future<UserEntity> getUserProfile();
+
+  // Realtime streams
+  Stream<DashboardEntities> streamDashboardData();
+  Stream<List<RecentTransactionEntity>> streamRecentTransactions();
 }

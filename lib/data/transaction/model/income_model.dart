@@ -3,15 +3,17 @@ import 'package:ecommerce/domain/transaction/entities/income_category.dart';
 import 'package:ecommerce/domain/transaction/entities/income_source.dart';
 
 class IncomeModel extends IncomeEntity {
+  final DateTime createdAt;
+
   IncomeModel({
     required super.id,
     required super.amount,
     required super.category,
     required super.description,
     required super.date,
-    required super.source
-
-  });
+    required super.source,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory IncomeModel.fromMap(Map<String, dynamic> map) {
     return IncomeModel(
@@ -23,6 +25,9 @@ class IncomeModel extends IncomeEntity {
       source: IncomeSource.values.byName(
         (map['source'] as String).split('.').last,
       ),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'] as String)
+          : null,
     );
   }
 
@@ -34,6 +39,7 @@ class IncomeModel extends IncomeEntity {
       'description': description,
       'date': date.toIso8601String(),
       'source': source.name,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 }

@@ -3,14 +3,17 @@ import 'package:ecommerce/domain/transaction/entities/expense_category.dart';
 import 'package:ecommerce/domain/transaction/entities/expense_wallet.dart';
 
 class ExpenseModel extends ExpenseEntity {
+  final DateTime createdAt;
+
   ExpenseModel({
     required super.id,
     required super.amount,
     required super.category,
     required super.description,
     required super.date,
-    required super.wallet
-  });
+    required super.wallet,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory ExpenseModel.fromMap(Map<String, dynamic> map) {
     return ExpenseModel(
@@ -22,6 +25,9 @@ class ExpenseModel extends ExpenseEntity {
       wallet: ExpenseWallet.values.byName(
         (map['wallet'] as String).split('.').last,
       ),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'] as String)
+          : null,
     );
   }
 
@@ -33,6 +39,7 @@ class ExpenseModel extends ExpenseEntity {
       'description': description,
       'date': date.toIso8601String(),
       'wallet': wallet.name,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 }

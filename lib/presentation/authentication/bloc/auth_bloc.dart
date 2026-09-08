@@ -1,11 +1,11 @@
-import 'package:ecommerce/core/error/app_failure.dart';
-import 'package:ecommerce/domain/authentication/usecases/getcurrentuser_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/isloggedin_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/signin_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/signout_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/signup_usecase.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_event.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_state.dart';
+﻿import 'package:fintracker/core/error/app_failure.dart';
+import 'package:fintracker/domain/authentication/usecases/getcurrentuser_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/isloggedin_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/signin_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/signout_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/signup_usecase.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_event.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 
@@ -80,3 +80,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 }
+

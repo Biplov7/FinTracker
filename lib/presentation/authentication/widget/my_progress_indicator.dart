@@ -1,5 +1,5 @@
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_radius.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 class MyProgressIndicator extends StatelessWidget {
@@ -30,3 +30,4 @@ class MyProgressIndicator extends StatelessWidget {
     );
   }
 }
+

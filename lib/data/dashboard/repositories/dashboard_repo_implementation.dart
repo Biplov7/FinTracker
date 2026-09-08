@@ -1,14 +1,14 @@
-import 'package:ecommerce/data/authentication/model/user_model.dart';
-import 'package:ecommerce/data/dashboard/datasource/getdashboarddata.dart';
-import 'package:ecommerce/data/dashboard/model/dashboard_model.dart';
-import 'package:ecommerce/data/dashboard/model/recent_transaction_model.dart';
-import 'package:ecommerce/data/transaction/model/expense_model.dart';
-import 'package:ecommerce/data/transaction/model/income_model.dart';
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
-import 'package:ecommerce/domain/dashboard/entities/dashboard_entities.dart';
-import 'package:ecommerce/domain/dashboard/entities/recent_transaction_entity.dart';
-import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
-import 'package:ecommerce/presentation/transaction/screen/add_transaction_screen.dart';
+﻿import 'package:fintracker/data/authentication/model/user_model.dart';
+import 'package:fintracker/data/dashboard/datasource/getdashboarddata.dart';
+import 'package:fintracker/data/dashboard/model/dashboard_model.dart';
+import 'package:fintracker/data/dashboard/model/recent_transaction_model.dart';
+import 'package:fintracker/data/add_transaction/model/expense_model.dart';
+import 'package:fintracker/data/add_transaction/model/income_model.dart';
+import 'package:fintracker/domain/authentication/entities/user_entity.dart';
+import 'package:fintracker/domain/dashboard/entities/dashboard_entities.dart';
+import 'package:fintracker/domain/dashboard/entities/recent_transaction_entity.dart';
+import 'package:fintracker/domain/dashboard/repositories/dashboard_repo.dart';
+import 'package:fintracker/domain/add_transaction/entities/transaction_type.dart';
 
 class DashboardRepoImplementation implements DashboardRepo {
   final Getdashboarddata ds;
@@ -139,3 +139,4 @@ class DashboardRepoImplementation implements DashboardRepo {
     });
   }
 }
+

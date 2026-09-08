@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/dashboard/entities/recent_transaction_entity.dart';
-import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
+﻿import 'package:fintracker/domain/dashboard/entities/recent_transaction_entity.dart';
+import 'package:fintracker/domain/dashboard/repositories/dashboard_repo.dart';
 
 class GetrecenttransactionUsecase {
   DashboardRepo repo;

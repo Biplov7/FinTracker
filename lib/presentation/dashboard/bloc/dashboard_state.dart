@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/dashboard/entities/dashboard_entities.dart';
-import 'package:ecommerce/domain/dashboard/entities/recent_transaction_entity.dart';
+﻿import 'package:fintracker/domain/dashboard/entities/dashboard_entities.dart';
+import 'package:fintracker/domain/dashboard/entities/recent_transaction_entity.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
@@ -22,3 +22,4 @@ class DashboardFailure extends DashboardState {
 
   DashboardFailure(this.error);
 }
+

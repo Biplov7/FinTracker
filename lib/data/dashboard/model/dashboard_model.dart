@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/dashboard/entities/dashboard_entities.dart';
+﻿import 'package:fintracker/domain/dashboard/entities/dashboard_entities.dart';
 
 class DashboardModel extends DashboardEntities {
   DashboardModel(

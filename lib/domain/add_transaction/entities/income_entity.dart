@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/transaction/entities/income_category.dart';
-import 'package:ecommerce/domain/transaction/entities/income_source.dart';
+﻿import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_source.dart';
 
 class IncomeEntity {
   final String id;
@@ -36,3 +36,4 @@ class IncomeEntity {
     );
   }
 }
+

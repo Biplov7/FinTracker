@@ -1,7 +1,7 @@
-import 'package:ecommerce/domain/authentication/entities/signup_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
-import 'package:ecommerce/domain/authentication/repositories/auth_repositories.dart';
-import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
+﻿import 'package:fintracker/domain/authentication/entities/signup_entity.dart';
+import 'package:fintracker/domain/authentication/entities/user_entity.dart';
+import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
+import 'package:fintracker/domain/dashboard/repositories/dashboard_repo.dart';
 
 class SignupUsecase {
   final AuthRepositories repo;
@@ -19,3 +19,4 @@ class SignupUsecase {
     return user;
   }
 }
+

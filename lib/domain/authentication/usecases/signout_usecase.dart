@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/authentication/repositories/auth_repositories.dart';
+﻿import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
 
 class SignoutUsecase {
   final AuthRepositories repo;

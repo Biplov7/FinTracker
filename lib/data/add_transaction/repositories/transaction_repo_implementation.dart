@@ -1,9 +1,9 @@
-import 'package:ecommerce/data/transaction/datasource/transaction_datasource.dart';
-import 'package:ecommerce/data/transaction/model/expense_model.dart';
-import 'package:ecommerce/data/transaction/model/income_model.dart';
-import 'package:ecommerce/domain/transaction/entities/expense_entity.dart';
-import 'package:ecommerce/domain/transaction/entities/income_entity.dart';
-import 'package:ecommerce/domain/transaction/repositories/transaction_repositories.dart';
+﻿import 'package:fintracker/data/add_transaction/datasource/transaction_datasource.dart';
+import 'package:fintracker/data/add_transaction/model/expense_model.dart';
+import 'package:fintracker/data/add_transaction/model/income_model.dart';
+import 'package:fintracker/domain/add_transaction/entities/expense_entity.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_entity.dart';
+import 'package:fintracker/domain/add_transaction/repositories/transaction_repositories.dart';
 
 class TransactionRepoImplementation implements TransactionRepositories {
   final TransactionDatasource ds;
@@ -40,3 +40,4 @@ class TransactionRepoImplementation implements TransactionRepositories {
   }
   
 }
+

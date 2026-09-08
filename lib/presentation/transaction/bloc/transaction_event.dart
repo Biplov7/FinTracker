@@ -1,22 +1,16 @@
-import 'package:ecommerce/domain/transaction/entities/expense_entity.dart';
-import 'package:ecommerce/domain/transaction/entities/income_entity.dart';
+import 'package:fintracker/domain/transaction/enum/transaction_peroid.dart';
+import 'package:fintracker/domain/transaction/entity/transaction_enum.dart';
 
 abstract class TransactionEvent {}
 
+class InitialEvent extends TransactionEvent {}
 
-class InitialEvent extends TransactionEvent{}
+class LoadTransactionEvent extends TransactionEvent {
+  final TransactionPeroid period;
+  final TransactionEnum type;
 
-class AddIncomeEvent extends TransactionEvent{
-  final IncomeEntity entity;
-  AddIncomeEvent(this.entity);
-}
-
-class AddExpenseEvent extends TransactionEvent{
-  final ExpenseEntity entity;
-  AddExpenseEvent(this.entity);
-}
-
-class AddBudgetEvent extends TransactionEvent{
-  final double budgetLimit;
-  AddBudgetEvent(this.budgetLimit);
+  LoadTransactionEvent({
+    required this.period,
+    required this.type,
+  });
 }

@@ -1,6 +1,6 @@
-import 'package:ecommerce/domain/authentication/entities/login_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/signup_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
+﻿import 'package:fintracker/domain/authentication/entities/login_entity.dart';
+import 'package:fintracker/domain/authentication/entities/signup_entity.dart';
+import 'package:fintracker/domain/authentication/entities/user_entity.dart';
 
 abstract class AuthRepositories {
   Future<UserEntity> signUp(SignupEntity signUp);

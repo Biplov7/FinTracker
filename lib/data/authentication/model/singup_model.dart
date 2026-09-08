@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/authentication/entities/signup_entity.dart';
+﻿import 'package:fintracker/domain/authentication/entities/signup_entity.dart';
 
 class SignupModel extends SignupEntity {
   SignupModel(

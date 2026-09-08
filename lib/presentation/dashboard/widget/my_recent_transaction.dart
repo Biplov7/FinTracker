@@ -1,12 +1,12 @@
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_spacing.dart';
-import 'package:ecommerce/core/utils/currency_formatter.dart';
-import 'package:ecommerce/domain/transaction/entities/expense_category.dart';
-import 'package:ecommerce/domain/transaction/entities/income_category.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_state.dart';
-import 'package:ecommerce/presentation/transaction/screen/add_transaction_screen.dart';
-import 'package:ecommerce/presentation/transaction/widget/transaction_icons.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_spacing.dart';
+import 'package:fintracker/core/utils/currency_formatter.dart';
+import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/transaction_type.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_state.dart';
+import 'package:fintracker/presentation/add_transaction/widget/transaction_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -128,3 +128,4 @@ class MyRecentTransaction extends StatelessWidget {
     );
   }
 }
+

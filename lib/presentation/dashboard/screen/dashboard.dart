@@ -1,17 +1,17 @@
-import 'package:ecommerce/core/router/app_name.dart';
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_spacing.dart';
-import 'package:ecommerce/core/utils/currency_formatter.dart';
+﻿import 'package:fintracker/core/router/app_name.dart';
+import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_spacing.dart';
+import 'package:fintracker/core/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_event.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_state.dart';
-import 'package:ecommerce/presentation/dashboard/widget/my_balance_card.dart';
-import 'package:ecommerce/presentation/dashboard/widget/my_budget_progress.dart';
-import 'package:ecommerce/presentation/dashboard/widget/my_recent_transaction.dart';
-import 'package:ecommerce/presentation/dashboard/widget/my_stat_card.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_event.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_state.dart';
+import 'package:fintracker/presentation/dashboard/widget/my_balance_card.dart';
+import 'package:fintracker/presentation/dashboard/widget/my_budget_progress.dart';
+import 'package:fintracker/presentation/dashboard/widget/my_recent_transaction.dart';
+import 'package:fintracker/presentation/dashboard/widget/my_stat_card.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -205,7 +205,7 @@ class _DashboardState extends State<Dashboard> with RouteAware {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hello, 👋",
+                "Hello, ðŸ‘‹",
                 style: TextStyle(
                   fontSize: AppSpacing.msm,
                   color: AppColors.card,
@@ -254,3 +254,4 @@ class _DashboardState extends State<Dashboard> with RouteAware {
     );
   }
 }
+

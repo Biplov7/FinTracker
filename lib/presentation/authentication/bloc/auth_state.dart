@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
+﻿import 'package:fintracker/domain/authentication/entities/user_entity.dart';
 
 abstract class AuthState {}
 
@@ -17,4 +17,5 @@ class AuthFailure extends AuthState{
   final String errorMsg;
   AuthFailure(this.errorMsg);
 }
+
 

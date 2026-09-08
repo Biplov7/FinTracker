@@ -1,7 +1,7 @@
-import 'package:ecommerce/domain/transaction/entities/expense_category.dart';
-import 'package:ecommerce/domain/transaction/entities/expense_wallet.dart';
-import 'package:ecommerce/domain/transaction/entities/income_category.dart';
-import 'package:ecommerce/domain/transaction/entities/income_source.dart';
+﻿import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/expense_wallet.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_source.dart';
 import 'package:flutter/material.dart';
 
 IconData incomeCategoryIcon(IncomeCategory? category) {
@@ -48,3 +48,4 @@ IconData expenseWalletIcon(ExpenseWallet? wallet) {
     null => Icons.account_balance_wallet_outlined,
   };
 }
+

@@ -1,72 +1,46 @@
-import 'package:ecommerce/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
-import 'package:ecommerce/domain/transaction/usecases/addexpense_usecase.dart';
-import 'package:ecommerce/domain/transaction/usecases/addincome_usecase.dart';
-import 'package:ecommerce/domain/transaction/usecases/setbudget_usecase.dart';
-import 'package:ecommerce/presentation/transaction/bloc/transaction_event.dart';
-import 'package:ecommerce/presentation/transaction/bloc/transaction_state.dart';
+import 'package:fintracker/domain/transaction/helper/transaction_date_calculation.dart';
+import 'package:fintracker/domain/transaction/usecases/loadtransaction_usecases.dart';
+import 'package:fintracker/presentation/transaction/bloc/transaction_event.dart';
+import 'package:fintracker/presentation/transaction/bloc/transaction_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
-  final AddexpenseUsecase addexpenseUsecase;
-  final AddincomeUsecase addincomeUsecase;
-  final SetBudgetUsecase setBudgetUsecase;
-  final UpdatedashboarddataUsecase updatedashboarddataUsecase;
-  TransactionBloc({
-    required this.addexpenseUsecase,
-    required this.addincomeUsecase,
-    required this.setBudgetUsecase,
-    required this.updatedashboarddataUsecase
-  }):super(TransactionInitial()){
-    on<AddExpenseEvent>(_addExpenseEvent);
-    on<AddIncomeEvent>(_addIncomeEvent);
-    on<AddBudgetEvent>(_addBudgetEvent);
+class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
+  final LoadtransactionUsecases loadtransactionUsecases;
+  TransactionBloc({required this.loadtransactionUsecases})
+    : super((InitialState())) {
+    on<InitialEvent>(_initialEvent);
+    on<LoadTransactionEvent>(_loadTransactionEvent);
   }
 
-  void _addExpenseEvent(AddExpenseEvent event, Emitter<TransactionState> emit) async {
+  Future<void> _initialEvent(InitialEvent event, Emitter<TransactionState> emit) async {
+    try {
+      emit(InitialState());
+    } catch (e) {
+      emit(TransactionFailure('Cannot Load Transaction'));
+    }
+  }
+
+  Future<void> _loadTransactionEvent(
+    LoadTransactionEvent event,
+    Emitter<TransactionState> emit,
+  ) async {
     try {
       emit(TransactionLoading());
-
-      // Get current balance to check if expense exceeds it
-      final dashboardData = await updatedashboarddataUsecase();
-
-      if (event.entity.amount > dashboardData.currentBalance) {
-        emit(TransactionFailure(
-          "Expense exceeds your current balance of \$${dashboardData.currentBalance.toStringAsFixed(2)}",
-        ));
-        return;
-      }
-
-      await addexpenseUsecase(event.entity);
-      await updatedashboarddataUsecase();
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-      emit(TransactionSuccess("Expense Added Successfully"));
+      final dataRange = getDateTime(event.period);
+      final transaction = await loadtransactionUsecases.call(
+        type: event.type,
+        startDate: dataRange.startDate,
+        endDate: dataRange.endDate,
+      );
+      emit(
+        TransactionSuccess(
+          transactions: transaction,
+          period: event.period,
+          type: event.type,
+        ),
+      );
     } catch (e) {
-      emit(TransactionFailure("Error Occured"));
-    }
-  }
-
-  void _addIncomeEvent(AddIncomeEvent event, Emitter<TransactionState> emit) async {
-    try{
-      emit(TransactionLoading());
-      await addincomeUsecase(event.entity);
-      await updatedashboarddataUsecase();
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-      emit(TransactionSuccess("Income Added Successfully"));
-    }catch(e){
-      emit(TransactionFailure("Error Occured"));
-    }
-  }
-
-  void _addBudgetEvent(AddBudgetEvent event, Emitter<TransactionState> emit) async {
-    try{
-      emit(TransactionLoading());
-      await setBudgetUsecase(event.budgetLimit);
-      await updatedashboarddataUsecase();
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-      emit(TransactionSuccess("Budget Limit Set Successfully"));
-    }catch(e){
-      emit(TransactionFailure("Error Occurred"));
+      emit(TransactionFailure(e.toString()));
     }
   }
 }
-

@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce/data/authentication/model/user_model.dart';
-import 'package:ecommerce/data/dashboard/model/dashboard_model.dart';
-import 'package:ecommerce/data/transaction/model/expense_model.dart';
-import 'package:ecommerce/data/transaction/model/income_model.dart';
+import 'package:fintracker/data/authentication/model/user_model.dart';
+import 'package:fintracker/data/dashboard/model/dashboard_model.dart';
+import 'package:fintracker/data/add_transaction/model/expense_model.dart';
+import 'package:fintracker/data/add_transaction/model/income_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Getdashboarddata {
@@ -14,12 +14,6 @@ class Getdashboarddata {
 
   CollectionReference<Map<String, dynamic>> get user =>
       firestore.collection('user');
-
-  CollectionReference<Map<String, dynamic>> get profile =>
-      firestore.collection('profile');
-
-  CollectionReference<Map<String, dynamic>> get dashboard =>
-      firestore.collection('dashboard');
 
   DocumentReference<Map<String, dynamic>> userDoc(String uid) {
     return user.doc(uid);
@@ -303,3 +297,4 @@ class Getdashboarddata {
     return dashboarddata;
   }
 }
+

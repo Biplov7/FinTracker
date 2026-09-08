@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/dashboard/entities/dashboard_entities.dart';
-import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
+﻿import 'package:fintracker/domain/dashboard/entities/dashboard_entities.dart';
+import 'package:fintracker/domain/dashboard/repositories/dashboard_repo.dart';
 
 class UpdatedashboarddataUsecase {
   DashboardRepo repo;
@@ -9,3 +9,4 @@ class UpdatedashboarddataUsecase {
     return repo.updateDashboardData();
   }
 }
+

@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/transaction/entities/expense_category.dart';
-import 'package:ecommerce/domain/transaction/entities/expense_wallet.dart';
+﻿import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/expense_wallet.dart';
 
 class ExpenseEntity {
   final String id;
@@ -36,3 +36,4 @@ class ExpenseEntity {
     );
   }
 }
+

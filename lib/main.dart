@@ -1,6 +1,6 @@
-import 'package:ecommerce/core/router/app_router.dart';
-import 'package:ecommerce/core/theme/app_theme.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_bloc.dart';
+﻿import 'package:fintracker/core/router/app_router.dart';
+import 'package:fintracker/core/theme/app_theme.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,3 +29,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

@@ -1,14 +1,13 @@
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_radius.dart';
-import 'package:ecommerce/presentation/transaction/widget/expense_form.dart';
-import 'package:ecommerce/presentation/transaction/widget/income_form.dart';
-import 'package:ecommerce/presentation/transaction/widget/budget_form.dart';
-import 'package:ecommerce/presentation/transaction/bloc/transaction_bloc.dart';
-import 'package:ecommerce/presentation/transaction/bloc/transaction_state.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_radius.dart';
+import 'package:fintracker/presentation/add_transaction/widget/expense_form.dart';
+import 'package:fintracker/presentation/add_transaction/widget/income_form.dart';
+import 'package:fintracker/presentation/add_transaction/widget/budget_form.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/transaction_state.dart';
+import 'package:fintracker/domain/add_transaction/entities/transaction_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-enum TransactionType { expense, income, budget }
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({super.key});
@@ -171,3 +170,4 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
   }
 }
+

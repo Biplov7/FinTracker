@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/authentication/entities/login_entity.dart';
+﻿import 'package:fintracker/domain/authentication/entities/login_entity.dart';
 
 class LoginModel extends LoginEntity {
   const LoginModel(

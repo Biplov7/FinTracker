@@ -1,5 +1,5 @@
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_text_style.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -40,3 +40,4 @@ class AppTheme {
     dividerTheme: DividerThemeData(),
   );
 }
+

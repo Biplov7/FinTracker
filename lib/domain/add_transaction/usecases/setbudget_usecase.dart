@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/transaction/repositories/transaction_repositories.dart';
+﻿import 'package:fintracker/domain/add_transaction/repositories/transaction_repositories.dart';
 
 class SetBudgetUsecase {
   final TransactionRepositories repo;
@@ -9,3 +9,4 @@ class SetBudgetUsecase {
     return repo.setBudgetLimit(budgetLimit);
   }
 }
+

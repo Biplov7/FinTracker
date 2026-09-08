@@ -1,7 +1,7 @@
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_spacing.dart';
-import 'package:ecommerce/core/utils/currency_formatter.dart';
-import 'package:ecommerce/presentation/authentication/widget/my_progress_indicator.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_spacing.dart';
+import 'package:fintracker/core/utils/currency_formatter.dart';
+import 'package:fintracker/presentation/authentication/widget/my_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -106,3 +106,4 @@ class _MyBudgetProgressState extends State<MyBudgetProgress> {
     );
   }
 }
+

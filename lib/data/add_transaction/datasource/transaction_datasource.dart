@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce/data/transaction/model/expense_model.dart';
-import 'package:ecommerce/data/transaction/model/income_model.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintracker/data/add_transaction/model/expense_model.dart';
+import 'package:fintracker/data/add_transaction/model/income_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TransactionDatasource {
@@ -58,3 +58,4 @@ class TransactionDatasource {
     ).doc('summary').set({'budgetLimit': budgetLimit}, SetOptions(merge: true));
   }
 }
+

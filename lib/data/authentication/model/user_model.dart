@@ -1,4 +1,4 @@
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
+﻿import 'package:fintracker/domain/authentication/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
   UserModel({

@@ -1,8 +1,8 @@
-import 'package:ecommerce/domain/authentication/entities/login_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/signup_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
-import 'package:ecommerce/domain/authentication/repositories/auth_repositories.dart';
-import 'package:ecommerce/domain/authentication/usecases/signin_usecase.dart';
+import 'package:fintracker/domain/authentication/entities/login_entity.dart';
+import 'package:fintracker/domain/authentication/entities/signup_entity.dart';
+import 'package:fintracker/domain/authentication/entities/user_entity.dart';
+import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
+import 'package:fintracker/domain/authentication/usecases/signin_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

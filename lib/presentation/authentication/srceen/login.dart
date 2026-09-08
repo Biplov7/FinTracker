@@ -1,13 +1,13 @@
-import 'package:ecommerce/core/router/app_name.dart';
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_spacing.dart';
-import 'package:ecommerce/domain/authentication/entities/login_entity.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_bloc.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_event.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_state.dart';
-import 'package:ecommerce/presentation/authentication/widget/my_button.dart';
-import 'package:ecommerce/presentation/authentication/widget/my_text.dart';
-import 'package:ecommerce/presentation/authentication/widget/my_text_field.dart';
+﻿import 'package:fintracker/core/router/app_name.dart';
+import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_spacing.dart';
+import 'package:fintracker/domain/authentication/entities/login_entity.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_event.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_state.dart';
+import 'package:fintracker/presentation/authentication/widget/my_button.dart';
+import 'package:fintracker/presentation/authentication/widget/my_text.dart';
+import 'package:fintracker/presentation/authentication/widget/my_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -230,3 +230,4 @@ class _LoginState extends State<Login> {
     );
   }
 }
+

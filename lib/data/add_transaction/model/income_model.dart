@@ -1,29 +1,29 @@
-import 'package:ecommerce/domain/transaction/entities/expense_entity.dart';
-import 'package:ecommerce/domain/transaction/entities/expense_category.dart';
-import 'package:ecommerce/domain/transaction/entities/expense_wallet.dart';
+﻿import 'package:fintracker/domain/add_transaction/entities/income_entity.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_source.dart';
 
-class ExpenseModel extends ExpenseEntity {
+class IncomeModel extends IncomeEntity {
   final DateTime createdAt;
 
-  ExpenseModel({
+  IncomeModel({
     required super.id,
     required super.amount,
     required super.category,
     required super.description,
     required super.date,
-    required super.wallet,
+    required super.source,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
-  factory ExpenseModel.fromMap(Map<String, dynamic> map) {
-    return ExpenseModel(
+  factory IncomeModel.fromMap(Map<String, dynamic> map) {
+    return IncomeModel(
       id: map['id'] as String,
       amount: (map['amount'] as num).toDouble(),
-      category: ExpenseCategory.values.byName(map['category'] as String),
+      category: IncomeCategory.values.byName(map['category'] as String),
       description: map['description'] as String,
       date: DateTime.parse(map['date'] as String),
-      wallet: ExpenseWallet.values.byName(
-        (map['wallet'] as String).split('.').last,
+      source: IncomeSource.values.byName(
+        (map['source'] as String).split('.').last,
       ),
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
@@ -38,8 +38,9 @@ class ExpenseModel extends ExpenseEntity {
       'category': category.name,
       'description': description,
       'date': date.toIso8601String(),
-      'wallet': wallet.name,
+      'source': source.name,
       'createdAt': createdAt.toIso8601String(),
     };
   }
 }
+

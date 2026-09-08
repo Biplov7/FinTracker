@@ -1,12 +1,12 @@
-import 'package:ecommerce/core/router/app_name.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:ecommerce/presentation/dashboard/screen/dashboard.dart';
-import 'package:ecommerce/presentation/authentication/srceen/login.dart';
-import 'package:ecommerce/presentation/authentication/srceen/signup.dart';
-import 'package:ecommerce/presentation/authentication/srceen/splash.dart';
-import 'package:ecommerce/presentation/transaction/screen/add_transaction_screen.dart';
-import 'package:ecommerce/injection.dart' as di;
-import 'package:ecommerce/presentation/transaction/bloc/transaction_bloc.dart';
+﻿import 'package:fintracker/core/router/app_name.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:fintracker/presentation/dashboard/screen/dashboard.dart';
+import 'package:fintracker/presentation/authentication/srceen/login.dart';
+import 'package:fintracker/presentation/authentication/srceen/signup.dart';
+import 'package:fintracker/presentation/authentication/srceen/splash.dart';
+import 'package:fintracker/presentation/add_transaction/screen/add_transaction_screen.dart';
+import 'package:fintracker/injection.dart' as di;
+import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -63,3 +63,4 @@ class AppRouter {
     ],
   );
 }
+

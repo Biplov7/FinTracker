@@ -1,12 +1,12 @@
-import 'package:ecommerce/core/error/app_failure.dart';
-import 'package:ecommerce/data/authentication/datasource/auth_datasource.dart';
-import 'package:ecommerce/data/authentication/model/login_model.dart';
-import 'package:ecommerce/data/authentication/model/singup_model.dart';
-import 'package:ecommerce/data/authentication/model/user_model.dart';
-import 'package:ecommerce/domain/authentication/entities/login_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/signup_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/user_entity.dart';
-import 'package:ecommerce/domain/authentication/repositories/auth_repositories.dart';
+﻿import 'package:fintracker/core/error/app_failure.dart';
+import 'package:fintracker/data/authentication/datasource/auth_datasource.dart';
+import 'package:fintracker/data/authentication/model/login_model.dart';
+import 'package:fintracker/data/authentication/model/singup_model.dart';
+import 'package:fintracker/data/authentication/model/user_model.dart';
+import 'package:fintracker/domain/authentication/entities/login_entity.dart';
+import 'package:fintracker/domain/authentication/entities/signup_entity.dart';
+import 'package:fintracker/domain/authentication/entities/user_entity.dart';
+import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepoimplementation implements AuthRepositories {
@@ -98,3 +98,4 @@ class AuthRepoimplementation implements AuthRepositories {
     }
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:ecommerce/presentation/transaction/screen/add_transaction_screen.dart';
+﻿import 'package:fintracker/domain/add_transaction/entities/transaction_type.dart';
 
 class RecentTransactionEntity {
   final String id;

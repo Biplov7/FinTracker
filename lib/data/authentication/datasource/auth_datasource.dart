@@ -1,5 +1,5 @@
-import 'package:ecommerce/data/authentication/model/login_model.dart';
-import 'package:ecommerce/data/authentication/model/singup_model.dart';
+﻿import 'package:fintracker/data/authentication/model/login_model.dart';
+import 'package:fintracker/data/authentication/model/singup_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthDatasource {
@@ -77,3 +77,4 @@ class AuthDatasource {
     return true;
   }
 }
+

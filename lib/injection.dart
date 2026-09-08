@@ -1,28 +1,32 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce/data/authentication/datasource/auth_datasource.dart';
-import 'package:ecommerce/data/authentication/repositories/auth_repo_implementation.dart';
-import 'package:ecommerce/data/dashboard/datasource/getdashboarddata.dart';
-import 'package:ecommerce/data/dashboard/repositories/dashboard_repo_implementation.dart';
-import 'package:ecommerce/data/transaction/repositories/transaction_repo_implementation.dart';
-import 'package:ecommerce/data/transaction/datasource/transaction_datasource.dart';
-import 'package:ecommerce/domain/authentication/repositories/auth_repositories.dart';
-import 'package:ecommerce/domain/authentication/usecases/getcurrentuser_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/isloggedin_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/signin_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/signout_usecase.dart';
-import 'package:ecommerce/domain/authentication/usecases/signup_usecase.dart';
-import 'package:ecommerce/domain/dashboard/repositories/dashboard_repo.dart';
-import 'package:ecommerce/domain/dashboard/usecases/getdashboarddata_usecase.dart';
-import 'package:ecommerce/domain/dashboard/usecases/getuserprofile_usecase.dart';
-import 'package:ecommerce/domain/dashboard/usecases/getrecenttransaction_usecase.dart';
-import 'package:ecommerce/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
-import 'package:ecommerce/domain/transaction/usecases/setbudget_usecase.dart';
-import 'package:ecommerce/domain/transaction/repositories/transaction_repositories.dart';
-import 'package:ecommerce/domain/transaction/usecases/addexpense_usecase.dart';
-import 'package:ecommerce/domain/transaction/usecases/addincome_usecase.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_bloc.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:ecommerce/presentation/transaction/bloc/transaction_bloc.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintracker/data/authentication/datasource/auth_datasource.dart';
+import 'package:fintracker/data/authentication/repositories/auth_repo_implementation.dart';
+import 'package:fintracker/data/dashboard/datasource/getdashboarddata.dart';
+import 'package:fintracker/data/dashboard/repositories/dashboard_repo_implementation.dart';
+import 'package:fintracker/data/add_transaction/repositories/transaction_repo_implementation.dart';
+import 'package:fintracker/data/add_transaction/datasource/transaction_datasource.dart';
+import 'package:fintracker/data/transaction/datasource/gettransactiondata.dart';
+import 'package:fintracker/data/transaction/repositories/transaction_repo.dart';
+import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
+import 'package:fintracker/domain/authentication/usecases/getcurrentuser_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/isloggedin_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/signin_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/signout_usecase.dart';
+import 'package:fintracker/domain/authentication/usecases/signup_usecase.dart';
+import 'package:fintracker/domain/dashboard/repositories/dashboard_repo.dart';
+import 'package:fintracker/domain/dashboard/usecases/getdashboarddata_usecase.dart';
+import 'package:fintracker/domain/dashboard/usecases/getuserprofile_usecase.dart';
+import 'package:fintracker/domain/dashboard/usecases/getrecenttransaction_usecase.dart';
+import 'package:fintracker/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
+import 'package:fintracker/domain/add_transaction/usecases/setbudget_usecase.dart';
+import 'package:fintracker/domain/add_transaction/repositories/transaction_repositories.dart';
+import 'package:fintracker/domain/add_transaction/usecases/addexpense_usecase.dart';
+import 'package:fintracker/domain/add_transaction/usecases/addincome_usecase.dart';
+import 'package:fintracker/domain/transaction/repositories/viewtransaction_repostiories.dart';
+import 'package:fintracker/domain/transaction/usecases/loadtransaction_usecases.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -77,6 +81,7 @@ Future<void> init() async {
     ),
   );
 
+  // Add Transaction (Expense/Income) - For adding new transactions
   sl.registerLazySingleton(
     () => TransactionDatasource(firebaseStore, firebaseAuth),
   );
@@ -96,4 +101,15 @@ Future<void> init() async {
       updatedashboarddataUsecase: sl()
     ),
   );
+
+  // View Transactions - For loading/viewing transactions
+  sl.registerLazySingleton(
+    () => Gettransactiondata(firebaseStore, firebaseAuth),
+  );
+  sl.registerLazySingleton<ViewtransactionRepostiories>(
+    () => TransactionRepo(sl()),
+  );
+
+  sl.registerLazySingleton(() => LoadtransactionUsecases(sl()));
 }
+

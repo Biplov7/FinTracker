@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/authentication/entities/login_entity.dart';
-import 'package:ecommerce/domain/authentication/entities/signup_entity.dart';
+﻿import 'package:fintracker/domain/authentication/entities/login_entity.dart';
+import 'package:fintracker/domain/authentication/entities/signup_entity.dart';
 
 abstract class AuthEvent {}
 
@@ -16,3 +16,4 @@ class AuthSignUp extends AuthEvent {
 class AuthSignOut extends AuthEvent {}
 
 class CheckAuthRequested extends AuthEvent {}
+

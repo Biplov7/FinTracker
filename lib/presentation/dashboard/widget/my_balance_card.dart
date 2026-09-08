@@ -1,6 +1,6 @@
-import 'package:ecommerce/core/theme/app_colors.dart';
-import 'package:ecommerce/core/theme/app_spacing.dart';
-import 'package:ecommerce/core/utils/currency_formatter.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_spacing.dart';
+import 'package:fintracker/core/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
 
 class MyBalanceCard extends StatefulWidget {
@@ -86,3 +86,4 @@ class _MyBalanceCardState extends State<MyBalanceCard> {
     );
   }
 }
+

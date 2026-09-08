@@ -1,5 +1,5 @@
-import 'package:ecommerce/domain/dashboard/entities/recent_transaction_entity.dart';
-import 'package:ecommerce/presentation/transaction/screen/add_transaction_screen.dart';
+﻿import 'package:fintracker/domain/dashboard/entities/recent_transaction_entity.dart';
+import 'package:fintracker/domain/add_transaction/entities/transaction_type.dart';
 
 class RecentTransactionModel extends RecentTransactionEntity {
   RecentTransactionModel(

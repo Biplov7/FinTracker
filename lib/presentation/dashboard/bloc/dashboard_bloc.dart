@@ -1,10 +1,10 @@
-import 'dart:async';
-import 'package:ecommerce/domain/dashboard/usecases/getdashboarddata_usecase.dart';
-import 'package:ecommerce/domain/dashboard/usecases/getuserprofile_usecase.dart';
-import 'package:ecommerce/domain/dashboard/usecases/getrecenttransaction_usecase.dart';
-import 'package:ecommerce/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_event.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_state.dart';
+﻿import 'dart:async';
+import 'package:fintracker/domain/dashboard/usecases/getdashboarddata_usecase.dart';
+import 'package:fintracker/domain/dashboard/usecases/getuserprofile_usecase.dart';
+import 'package:fintracker/domain/dashboard/usecases/getrecenttransaction_usecase.dart';
+import 'package:fintracker/domain/dashboard/usecases/updatedashboarddata_usecase.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_event.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
@@ -90,3 +90,4 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     return super.close();
   }
 }
+

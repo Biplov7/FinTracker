@@ -1,15 +1,15 @@
-import 'package:ecommerce/core/router/app_name.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_bloc.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_event.dart';
-import 'package:ecommerce/presentation/authentication/bloc/auth_state.dart';
-import 'package:ecommerce/presentation/authentication/widget/my_progress_indicator.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_event.dart';
-import 'package:ecommerce/presentation/dashboard/bloc/dashboard_state.dart';
+﻿import 'package:fintracker/core/router/app_name.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_event.dart';
+import 'package:fintracker/presentation/authentication/bloc/auth_state.dart';
+import 'package:fintracker/presentation/authentication/widget/my_progress_indicator.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_event.dart';
+import 'package:fintracker/presentation/dashboard/bloc/dashboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ecommerce/injection.dart' as di;
+import 'package:fintracker/injection.dart' as di;
 import 'dart:async';
 
 class Splash extends StatefulWidget {
@@ -100,3 +100,4 @@ class _SplashState extends State<Splash> {
     );
   }
 }
+

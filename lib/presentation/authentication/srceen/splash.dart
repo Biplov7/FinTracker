@@ -70,7 +70,7 @@ class _SplashState extends State<Splash> {
           _preloadDashboardData().then((_) {
             if (mounted) {
               // ignore: use_build_context_synchronously
-              context.goNamed(AppName.homeName);
+              context.goNamed(AppName.shellName);
             }
           });
         }
@@ -100,4 +100,3 @@ class _SplashState extends State<Splash> {
     );
   }
 }
-

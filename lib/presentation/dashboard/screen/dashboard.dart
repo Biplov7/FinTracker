@@ -1,10 +1,8 @@
-﻿import 'package:fintracker/core/router/app_name.dart';
-import 'package:fintracker/core/theme/app_colors.dart';
+﻿import 'package:fintracker/core/theme/app_colors.dart';
 import 'package:fintracker/core/theme/app_spacing.dart';
 import 'package:fintracker/core/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_event.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_state.dart';
@@ -47,68 +45,6 @@ class _DashboardState extends State<Dashboard> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        elevation: 18,
-        backgroundColor: AppColors.card,
-
-        indicatorColor: AppColors.transp,
-        overlayColor: WidgetStateProperty.all(Colors.transparent),
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
-          if (states.contains(WidgetState.selected)) {
-            return TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            );
-          }
-
-          return TextStyle(color: AppColors.textSecondary, fontSize: 12);
-        }),
-        selectedIndex: selectedValue,
-        onDestinationSelected: (value) {
-          setState(() {
-            selectedValue = value;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home, color: AppColors.primary),
-            label: "Home",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.list_alt_outlined),
-            selectedIcon: Icon(Icons.receipt, color: AppColors.primary),
-            label: "Transaction",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_outlined),
-            selectedIcon: Icon(Icons.bar_chart, color: AppColors.primary),
-            label: "Report",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            selectedIcon: Icon(
-              Icons.account_balance_wallet,
-              color: AppColors.primary,
-            ),
-            label: "Wallet",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outlined),
-            selectedIcon: Icon(Icons.person, color: AppColors.primary),
-            label: "Profile",
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () {
-          context.push(AppName.addTransactionName);
-        },
-        child: Icon(Icons.add),
-      ),
       backgroundColor: AppColors.primary,
       body: BlocConsumer<DashboardBloc, DashboardState>(
         listener: (context, state) {
@@ -205,7 +141,7 @@ class _DashboardState extends State<Dashboard> with RouteAware {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hello, ðŸ‘‹",
+                "Hello, ",
                 style: TextStyle(
                   fontSize: AppSpacing.msm,
                   color: AppColors.card,
@@ -254,4 +190,3 @@ class _DashboardState extends State<Dashboard> with RouteAware {
     );
   }
 }
-

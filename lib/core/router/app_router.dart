@@ -1,4 +1,5 @@
 ﻿import 'package:fintracker/core/router/app_name.dart';
+import 'package:fintracker/main_shell.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:fintracker/presentation/dashboard/screen/dashboard.dart';
 import 'package:fintracker/presentation/authentication/srceen/login.dart';
@@ -41,15 +42,26 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/shell',
+        name: AppName.shellName,
+        builder: (context, state) {
+          return BlocProvider.value(value: _dashboardBloc, child: MainShell());
+        },
+      ),
+      GoRoute(
         path: '/home',
         name: AppName.homeName,
         builder: (context, state) {
-          return BlocProvider.value(
-            value: _dashboardBloc,
-            child: Dashboard(),
-          );
+          return BlocProvider.value(value: _dashboardBloc, child: Dashboard());
         },
       ),
+      // GoRoute(
+      //   path: '/main',
+      //   name: AppName.mainName,
+      //   builder: (context, state) {
+      //     return MainShell();
+      //   },
+      // ),
       GoRoute(
         path: '/addTransaction',
         name: AppName.addTransactionName,
@@ -63,4 +75,3 @@ class AppRouter {
     ],
   );
 }
-

@@ -1,7 +1,7 @@
 ﻿import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_entity.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_wallet.dart';
-import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_event.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_state.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,6 @@ import 'package:fintracker/presentation/add_transaction/widget/enum_drop_down.da
 import 'package:fintracker/presentation/add_transaction/widget/transaction_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({super.key});
@@ -71,7 +70,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
       }
     }
 
-    return BlocConsumer<TransactionBloc, TransactionState>(
+    return BlocConsumer<AllTransactionBloc, TransactionState>(
       listener: (context, state) {
         if (state is TransactionSuccess) {
           _clearForm();
@@ -112,7 +111,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
               const SizedBox(height: AppRadius.small),
               MyTextField(
                 preIcon: Icon(
-                  LucideIcons.dollarSign,
+                  Icons.monetization_on,
                   color: AppColors.primary,
                   size: AppRadius.large,
                 ),
@@ -284,8 +283,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                         date: _selectedDate!,
                         wallet: source!,
                       );
-                      // Send to BLoC - balance check happens there
-                      context.read<TransactionBloc>().add(
+                      context.read<AllTransactionBloc>().add(
                         AddExpenseEvent(expense),
                       );
                     } else {

@@ -2,13 +2,12 @@
 import 'package:fintracker/core/theme/app_radius.dart';
 import 'package:fintracker/core/theme/app_spacing.dart';
 import 'package:fintracker/presentation/authentication/widget/my_text_field.dart';
-import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_event.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class BudgetForm extends StatefulWidget {
   const BudgetForm({super.key});
@@ -55,7 +54,7 @@ class _BudgetFormState extends State<BudgetForm> {
       }
     }
 
-    return BlocConsumer<TransactionBloc, TransactionState>(
+    return BlocConsumer<AllTransactionBloc, TransactionState>(
       listener: (context, state) {
         if (state is TransactionSuccess) {
           _clearForm();
@@ -95,7 +94,7 @@ class _BudgetFormState extends State<BudgetForm> {
               const SizedBox(height: AppRadius.small),
               MyTextField(
                 preIcon: Icon(
-                  LucideIcons.dollarSign,
+                  Icons.monetization_on,
                   color: AppColors.primary,
                   size: AppRadius.large,
                 ),
@@ -166,7 +165,7 @@ class _BudgetFormState extends State<BudgetForm> {
                     }
 
                     final budgetLimit = double.parse(budgetLimitController.text);
-                    context.read<TransactionBloc>().add(
+                    context.read<AllTransactionBloc>().add(
                       AddBudgetEvent(budgetLimit),
                     );
                   },

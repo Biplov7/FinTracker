@@ -5,5 +5,5 @@ class AppName {
   static const String homeName = 'home';
   static const String shellName = 'shell';
   static const String addTransactionName = 'addTransaction';
-  // static const String mainName = 'main';
+  static const String transactionName = 'transaction';
 }

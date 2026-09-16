@@ -6,12 +6,12 @@ import 'package:fintracker/presentation/add_transaction/bloc/transaction_event.d
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TransactionBloc extends Bloc<TransactionEvent,TransactionState>{
+class AllTransactionBloc extends Bloc<TransactionEvent,TransactionState>{
   final AddexpenseUsecase addexpenseUsecase;
   final AddincomeUsecase addincomeUsecase;
   final SetBudgetUsecase setBudgetUsecase;
   final UpdatedashboarddataUsecase updatedashboarddataUsecase;
-  TransactionBloc({
+  AllTransactionBloc({
     required this.addexpenseUsecase,
     required this.addincomeUsecase,
     required this.setBudgetUsecase,

@@ -1,9 +1,9 @@
 ﻿import 'package:fintracker/core/theme/app_colors.dart';
 import 'package:fintracker/core/theme/app_radius.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/widget/expense_form.dart';
 import 'package:fintracker/presentation/add_transaction/widget/income_form.dart';
 import 'package:fintracker/presentation/add_transaction/widget/budget_form.dart';
-import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_state.dart';
 import 'package:fintracker/domain/add_transaction/entities/transaction_type.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +150,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 ),
               ),
             ),
-            BlocBuilder<TransactionBloc, TransactionState>(
+            BlocBuilder<AllTransactionBloc, TransactionState>(
               builder: (context, state) {
                 if (state is! TransactionLoading) {
                   return const SizedBox.shrink();

@@ -6,7 +6,7 @@ import 'package:fintracker/domain/add_transaction/entities/income_category.dart'
 import 'package:fintracker/domain/add_transaction/entities/income_entity.dart';
 import 'package:fintracker/domain/add_transaction/entities/income_source.dart';
 import 'package:fintracker/presentation/authentication/widget/my_text_field.dart';
-import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_event.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/transaction_state.dart';
 import 'package:fintracker/presentation/add_transaction/widget/enum_drop_down.dart';
@@ -14,7 +14,6 @@ import 'package:fintracker/presentation/add_transaction/widget/transaction_icons
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class IncomeForm extends StatefulWidget {
   const IncomeForm({super.key});
@@ -71,7 +70,7 @@ class _IncomeFormState extends State<IncomeForm> {
       }
     }
 
-    return BlocConsumer<TransactionBloc, TransactionState>(
+    return BlocConsumer<AllTransactionBloc, TransactionState>(
       listener: (context, state) {
         if (state is TransactionSuccess) {
           _clearForm();
@@ -112,7 +111,7 @@ class _IncomeFormState extends State<IncomeForm> {
               const SizedBox(height: AppRadius.small),
               MyTextField(
                 preIcon: Icon(
-                  LucideIcons.dollarSign,
+                  Icons.monetization_on,
                   color: AppColors.primary,
                   size: AppRadius.large,
                 ),
@@ -285,7 +284,7 @@ class _IncomeFormState extends State<IncomeForm> {
                         date: _selectedDate!,
                         source: source!,
                       );
-                      context.read<TransactionBloc>().add(AddIncomeEvent(income));
+                      context.read<AllTransactionBloc>().add(AddIncomeEvent(income));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

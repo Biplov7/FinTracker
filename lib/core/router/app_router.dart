@@ -7,7 +7,9 @@ import 'package:fintracker/presentation/authentication/srceen/signup.dart';
 import 'package:fintracker/presentation/authentication/srceen/splash.dart';
 import 'package:fintracker/presentation/add_transaction/screen/add_transaction_screen.dart';
 import 'package:fintracker/injection.dart' as di;
-import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
+import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/transaction/screen/transaction.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -55,23 +57,23 @@ class AppRouter {
           return BlocProvider.value(value: _dashboardBloc, child: Dashboard());
         },
       ),
-      // GoRoute(
-      //   path: '/main',
-      //   name: AppName.mainName,
-      //   builder: (context, state) {
-      //     return MainShell();
-      //   },
-      // ),
       GoRoute(
         path: '/addTransaction',
         name: AppName.addTransactionName,
         builder: (context, state) {
           return BlocProvider(
-            create: (context) => di.sl<TransactionBloc>(),
+            create: (context) => di.sl<AllTransactionBloc>(),
             child: const AddTransactionScreen(),
           );
         },
       ),
+      GoRoute(path: '/transaction',
+      name: AppName.transactionName,
+      builder: (context, state) {
+        return BlocProvider(create: (context) => di.sl<TransactionBloc>(),
+        child: const Transaction(),);
+      },
+      )
     ],
   );
 }

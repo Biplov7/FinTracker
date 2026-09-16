@@ -26,7 +26,8 @@ import 'package:fintracker/domain/transaction/repositories/viewtransaction_repos
 import 'package:fintracker/domain/transaction/usecases/loadtransaction_usecases.dart';
 import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:fintracker/presentation/add_transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
+import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -94,7 +95,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddincomeUsecase(sl()));
 
   sl.registerFactory(
-    () => TransactionBloc(
+    () => AllTransactionBloc(
       addexpenseUsecase: sl(),
       addincomeUsecase: sl(),
       setBudgetUsecase: sl(),
@@ -111,5 +112,7 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton(() => LoadtransactionUsecases(sl()));
+
+  sl.registerFactory(() => TransactionBloc(loadtransactionUsecases: sl()),);
 }
 

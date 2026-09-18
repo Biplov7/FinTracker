@@ -1,4 +1,5 @@
-﻿import 'package:fintracker/domain/add_transaction/entities/expense_entity.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintracker/domain/add_transaction/entities/expense_entity.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_wallet.dart';
 
@@ -21,12 +22,16 @@ class ExpenseModel extends ExpenseEntity {
       amount: (map['amount'] as num).toDouble(),
       category: ExpenseCategory.values.byName(map['category'] as String),
       description: map['description'] as String,
-      date: DateTime.parse(map['date'] as String),
+      date: (map['date'] is Timestamp)
+          ? (map['date'] as Timestamp).toDate()
+          : DateTime.parse(map['date'] as String),
       wallet: ExpenseWallet.values.byName(
         (map['wallet'] as String).split('.').last,
       ),
       createdAt: map['createdAt'] != null
-          ? DateTime.parse(map['createdAt'] as String)
+          ? (map['createdAt'] is Timestamp)
+              ? (map['createdAt'] as Timestamp).toDate()
+              : DateTime.parse(map['createdAt'] as String)
           : null,
     );
   }
@@ -37,9 +42,9 @@ class ExpenseModel extends ExpenseEntity {
       'amount': amount,
       'category': category.name,
       'description': description,
-      'date': date.toIso8601String(),
+      'date': Timestamp.fromDate(date),
       'wallet': wallet.name,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 }

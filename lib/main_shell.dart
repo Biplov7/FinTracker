@@ -1,8 +1,12 @@
 import 'package:fintracker/core/router/app_name.dart';
 import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/injection.dart' as di;
 import 'package:fintracker/presentation/dashboard/screen/dashboard.dart';
+import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/transaction/bloc/transaction_event.dart';
 import 'package:fintracker/presentation/transaction/screen/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class MainShell extends StatefulWidget {
@@ -15,7 +19,14 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   final screen = [
     Dashboard(),
-    Transaction(),
+    BlocProvider(
+      create: (context) {
+        final bloc = di.sl<TransactionBloc>();
+        bloc.add(InitialEvent());
+        return bloc;
+      },
+      child: Transaction(),
+    ),
     // Report(),
     // Wallet(),
     // profile()
@@ -86,10 +97,7 @@ class _MainShellState extends State<MainShell> {
         },
         child: Icon(Icons.add),
       ),
-      body: IndexedStack(
-        index: selectedValue,
-        children: screen,
-      )
+      body: IndexedStack(index: selectedValue, children: screen),
     );
   }
 }

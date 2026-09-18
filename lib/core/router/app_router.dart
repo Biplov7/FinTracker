@@ -8,8 +8,6 @@ import 'package:fintracker/presentation/authentication/srceen/splash.dart';
 import 'package:fintracker/presentation/add_transaction/screen/add_transaction_screen.dart';
 import 'package:fintracker/injection.dart' as di;
 import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
-import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
-import 'package:fintracker/presentation/transaction/screen/transaction.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -67,13 +65,21 @@ class AppRouter {
           );
         },
       ),
-      GoRoute(path: '/transaction',
-      name: AppName.transactionName,
-      builder: (context, state) {
-        return BlocProvider(create: (context) => di.sl<TransactionBloc>(),
-        child: const Transaction(),);
-      },
-      )
+      // Don't need this because I used IndexStack to navigate so bloc is also going inside that list. 
+      // GoRoute(
+      //   path: '/transaction',
+      //   name: AppName.transactionName,
+      //   builder: (context, state) {
+      //     return BlocProvider(
+      //       create: (context) {
+      //         final bloc = di.sl<TransactionBloc>();
+      //         bloc.add(InitialEvent());
+      //         return bloc;
+      //       },
+      //       child: const Transaction(),
+      //     );
+      //   },
+      // )
     ],
   );
 }

@@ -1,4 +1,5 @@
-﻿import 'package:fintracker/domain/transaction/entity/transaction_entity.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintracker/domain/transaction/entity/transaction_entity.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_wallet.dart';
 import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
@@ -19,7 +20,9 @@ class TransactionModel extends TransactionEntity {
     return TransactionModel(
       map['id'] as String,
       (map['amount'] as num).toDouble(),
-      DateTime.parse(map['date'] as String),
+      (map['date'] is Timestamp)
+          ? (map['date'] as Timestamp).toDate()
+          : DateTime.parse(map['date'] as String),
 
       map['expenseCategory'] != null
           ? ExpenseCategory.values.byName(map['expenseCategory'] as String)
@@ -43,7 +46,7 @@ class TransactionModel extends TransactionEntity {
     return {
       'id': id,
       'amount': amount,
-      'date': date.toIso8601String(),
+      'date': Timestamp.fromDate(date),
       'expenseCategory': expenseCategory?.name,
       'incomeCategory': incomeCategory?.name,
       'source': source?.name,

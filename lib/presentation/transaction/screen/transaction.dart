@@ -7,6 +7,9 @@ import 'package:fintracker/presentation/add_transaction/widget/transaction_icons
 import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_event.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_state.dart';
+import 'package:fintracker/presentation/transaction/helper/transaction_date_helper.dart';
+import 'package:fintracker/presentation/transaction/helper/transaction_label_uppercase.dart';
+import 'package:fintracker/presentation/transaction/helper/transaction_similar_date_helper.dart';
 import 'package:fintracker/presentation/transaction/widget/category_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,11 +29,20 @@ class _TransactionState extends State<Transaction> {
   TransactionPeroid selectPeroid = TransactionPeroid.thisYear;
 
   @override
+  void initState() {
+    super.initState();
+
+    context.read<TransactionBloc>().add(
+      LoadTransactionEvent(period: selectPeroid, type: TransactionEnum.all),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.background,
-        title: Text("Transactions", style: TextTheme.of(context).titleMedium),
+        title: Text("Transactions", style: TextTheme.of(context).titleLarge),
         actions: [
           Row(
             children: [
@@ -123,6 +135,13 @@ class _TransactionState extends State<Transaction> {
                     setState(() {
                       selectPeroid = peroid;
                     });
+                    // Reload transactions with new period
+                    context.read<TransactionBloc>().add(
+                      LoadTransactionEvent(
+                        period: peroid,
+                        type: TransactionEnum.values[onSelect],
+                      ),
+                    );
                   }
                 },
                 icon: Icon(Icons.filter_list),
@@ -199,38 +218,165 @@ class _TransactionState extends State<Transaction> {
                       if (state.transactions.isEmpty) {
                         return Center(child: Text("No transaction found"));
                       }
-                      return ListView.builder(
-                        itemCount: state.transactions.length,
-                        itemBuilder: (context, index) {
-                          final transaction = state.transactions[index];
-                          final isIncome = transaction.incomeCategory != null;
-                          final isIcon = isIncome
-                              ? incomeCategoryIcon(transaction.incomeCategory)
-                              : expenseCategoryIcon(
-                                  transaction.expenseCategory,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 25.0,
+                          horizontal: 8,
+                        ),
+                        child: ListView.builder(
+                          itemCount: state.transactions.length,
+                          itemBuilder: (context, index) {
+                            final transaction = state.transactions[index];
+                            final isIncome = transaction.incomeCategory != null;
+                            final isIcon = isIncome
+                                ? incomeCategoryIcon(transaction.incomeCategory)
+                                : expenseCategoryIcon(
+                                    transaction.expenseCategory,
+                                  );
+                            final categoryName = upperCase(
+                              isIncome
+                                  ? transaction.incomeCategory?.name ?? 'Income'
+                                  : transaction.expenseCategory?.name ??
+                                        'Expense',
+                            );
+                            final walletName = isIncome
+                                ? transaction.source?.name
+                                : transaction.wallet?.name;
+                            final showDate =
+                                index == 0 ||
+                                !isSameDay(
+                                  transaction.date,
+                                  state.transactions[index - 1].date,
                                 );
-                          final categoryName = isIncome
-                              ? transaction.incomeCategory?.name ?? 'Income'
-                              : transaction.expenseCategory?.name ?? 'Expense';
-                          return ListTile(
-                            leading: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: isIncome
-                                    ? AppColors.primary
-                                    : AppColors.danger,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                isIcon,
-                                color: isIncome
-                                    ? AppColors.primary
-                                    : AppColors.danger,
-                              ),
-                            ),
-                            title: Text(categoryName),
-                          );
-                        },
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (showDate)
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      getDateLabel(transaction.date),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        AppRadius.medium,
+                                      ),
+                                      border: Border.all(
+                                        color: AppColors.textPrimary.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      // trailing: Icon(Icons.home),
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          isIncome
+                                              ? Text(
+                                                  "+ \$${transaction.amount.toString()}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                )
+                                              : Text(
+                                                  "-  \$${transaction.amount.toString()}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: AppColors.danger,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                        ],
+                                      ),
+                                      leading: Container(
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: Icon(isIcon),
+                                      ),
+                                      title: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            categoryName,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '${(transaction.date.hour % 12 == 0 ? 12 : transaction.date.hour % 12).toString().padLeft(2, '0')}:${transaction.date.minute.toString().padLeft(2, '0')} ${transaction.date.hour >= 12 ? 'PM' : 'AM'}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                      color: AppColors
+                                                          .textSecondary,
+                                                    ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                ),
+                                                child: Container(
+                                                  height: 5,
+                                                  width: 5,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: AppColors.textPrimary
+                                                        .withValues(alpha: 0.6),
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                walletName.toString(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                      color: AppColors
+                                                          .textSecondary,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       );
                     }
                     return Center(child: Text("Select a filter"));

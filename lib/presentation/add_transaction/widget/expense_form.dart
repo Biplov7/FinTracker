@@ -63,8 +63,16 @@ class _ExpenseFormState extends State<ExpenseForm> {
       );
 
       if (picker != null) {
+        final now = DateTime.now();
+        final dateTimeWithCurrentTime = DateTime(
+          picker.year,
+          picker.month,
+          picker.day,
+          now.hour,
+          now.minute,
+        );
         setState(() {
-          _selectedDate = picker;
+          _selectedDate = dateTimeWithCurrentTime;
           dateController.text = DateFormat('MMMM d, yyyy').format(picker);
         });
       }

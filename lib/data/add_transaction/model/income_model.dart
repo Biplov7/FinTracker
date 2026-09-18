@@ -1,4 +1,5 @@
-﻿import 'package:fintracker/domain/add_transaction/entities/income_entity.dart';
+﻿import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintracker/domain/add_transaction/entities/income_entity.dart';
 import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
 import 'package:fintracker/domain/add_transaction/entities/income_source.dart';
 
@@ -21,12 +22,16 @@ class IncomeModel extends IncomeEntity {
       amount: (map['amount'] as num).toDouble(),
       category: IncomeCategory.values.byName(map['category'] as String),
       description: map['description'] as String,
-      date: DateTime.parse(map['date'] as String),
+      date: (map['date'] is Timestamp)
+          ? (map['date'] as Timestamp).toDate()
+          : DateTime.parse(map['date'] as String),
       source: IncomeSource.values.byName(
         (map['source'] as String).split('.').last,
       ),
       createdAt: map['createdAt'] != null
-          ? DateTime.parse(map['createdAt'] as String)
+          ? (map['createdAt'] is Timestamp)
+              ? (map['createdAt'] as Timestamp).toDate()
+              : DateTime.parse(map['createdAt'] as String)
           : null,
     );
   }
@@ -37,9 +42,9 @@ class IncomeModel extends IncomeEntity {
       'amount': amount,
       'category': category.name,
       'description': description,
-      'date': date.toIso8601String(),
+      'date': Timestamp.fromDate(date),
       'source': source.name,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 }

@@ -1,3 +1,5 @@
+import 'package:fintracker/domain/transaction/entity/transaction_enum.dart';
+import 'package:fintracker/domain/transaction/enum/transaction_peroid.dart';
 import 'package:fintracker/domain/transaction/helper/transaction_date_calculation.dart';
 import 'package:fintracker/domain/transaction/usecases/loadtransaction_usecases.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_event.dart';
@@ -14,7 +16,20 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
   Future<void> _initialEvent(InitialEvent event, Emitter<TransactionState> emit) async {
     try {
-      emit(InitialState());
+      emit(TransactionLoading());
+      final dataRange = getDateTime(TransactionPeroid.thisYear);
+      final transaction = await loadtransactionUsecases.call(
+        type: TransactionEnum.all,
+        startDate: dataRange.startDate,
+        endDate: dataRange.endDate,
+      );
+      emit(
+        TransactionSuccess(
+          transactions: transaction,
+          period: TransactionPeroid.thisYear,
+          type: TransactionEnum.all,
+        ),
+      );
     } catch (e) {
       emit(TransactionFailure('Cannot Load Transaction'));
     }

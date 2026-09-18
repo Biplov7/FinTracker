@@ -42,11 +42,13 @@ class Gettransactiondata {
     final incomeSnapshot = await income(user)
         .where('date', isGreaterThanOrEqualTo: filter.startDate)
         .where('date', isLessThan: filter.endDate)
+        .orderBy('date', descending: true)
         .get();
 
     final expenseSnapshot = await expense(user)
         .where('date', isGreaterThanOrEqualTo: filter.startDate)
         .where('date', isLessThan: filter.endDate)
+        .orderBy('date', descending: true)
         .get();
 
     final incomeTransaction = incomeSnapshot.docs.map((e) {
@@ -84,7 +86,7 @@ class Gettransactiondata {
 
     allTransaction.sort((a, b) {
       return b.date.compareTo(a.date);
-    },);
+    });
 
     return allTransaction;
   }
@@ -95,6 +97,7 @@ class Gettransactiondata {
     final incomeTransaction = await income(user)
         .where('date', isGreaterThanOrEqualTo: filter.startDate)
         .where('date', isLessThan: filter.endDate)
+        .orderBy('date', descending: true)
         .get();
 
     final incomeTran = incomeTransaction.docs.map((e) {
@@ -120,6 +123,7 @@ class Gettransactiondata {
     final expesnses = await expense(user)
         .where('date', isGreaterThanOrEqualTo: filter.startDate)
         .where('date', isLessThan: filter.endDate)
+        .orderBy('date', descending: true)
         .get();
 
     final expenseTrans = expesnses.docs.map((e) {
@@ -130,8 +134,8 @@ class Gettransactiondata {
         expenseData.amount,
         expenseData.date,
         expenseData.category,
-        null, 
-        null, 
+        null,
+        null,
         expenseData.wallet,
       );
     }).toList();

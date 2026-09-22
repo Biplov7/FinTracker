@@ -1,6 +1,7 @@
 import 'package:fintracker/core/theme/app_colors.dart';
 import 'package:fintracker/core/theme/app_radius.dart';
 import 'package:fintracker/core/theme/app_spacing.dart';
+import 'package:fintracker/core/utils/currency_formatter.dart';
 import 'package:fintracker/domain/transaction/entity/transaction_enum.dart';
 import 'package:fintracker/domain/transaction/enum/transaction_peroid.dart';
 import 'package:fintracker/presentation/add_transaction/widget/transaction_icons.dart';
@@ -284,7 +285,7 @@ class _TransactionState extends State<Transaction> {
                                         children: [
                                           isIncome
                                               ? Text(
-                                                  "+ \$${transaction.amount.toString()}",
+                                                  "+ ${formatCurrency(transaction.amount)}",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium
@@ -296,7 +297,7 @@ class _TransactionState extends State<Transaction> {
                                                       ),
                                                 )
                                               : Text(
-                                                  "-  \$${transaction.amount.toString()}",
+                                                  "-  ${formatCurrency(transaction.amount)}",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium

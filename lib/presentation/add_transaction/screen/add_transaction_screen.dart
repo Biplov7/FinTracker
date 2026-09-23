@@ -35,117 +35,125 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                Container(
-                  width: double.infinity,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22),
-                    color: Colors.grey.withValues(alpha: 0.12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedType = TransactionType.expense;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: selectedType == TransactionType.expense
-                                  ? AppColors.danger
-                                  : AppColors.transp,
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Expense",
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          selectedType ==
-                                              TransactionType.expense
-                                          ? AppColors.card
-                                          : DarkTheme.darkbackground,
-                                    ),
+                    Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Colors.grey.withValues(alpha: 0.12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedType = TransactionType.expense;
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: selectedType == TransactionType.expense
+                                      ? AppColors.danger
+                                      : AppColors.transp,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Expense",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              selectedType ==
+                                                  TransactionType.expense
+                                              ? AppColors.card
+                                              : DarkTheme.darkbackground,
+                                        ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedType = TransactionType.income;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: selectedType == TransactionType.income
-                                  ? AppColors.primary
-                                  : AppColors.transp,
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Income",
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          selectedType == TransactionType.income
-                                          ? AppColors.card
-                                          : DarkTheme.darkbackground,
-                                    ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedType = TransactionType.income;
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: selectedType == TransactionType.income
+                                      ? AppColors.primary
+                                      : AppColors.transp,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Income",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              selectedType ==
+                                                  TransactionType.income
+                                              ? AppColors.card
+                                              : DarkTheme.darkbackground,
+                                        ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedType = TransactionType.budget;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: selectedType == TransactionType.budget
-                                  ? AppColors.primary
-                                  : AppColors.transp,
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Budget",
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          selectedType == TransactionType.budget
-                                          ? AppColors.card
-                                          : DarkTheme.darkbackground,
-                                    ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedType = TransactionType.budget;
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: selectedType == TransactionType.budget
+                                      ? AppColors.primary
+                                      : AppColors.transp,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Budget",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              selectedType ==
+                                                  TransactionType.budget
+                                              ? AppColors.card
+                                              : DarkTheme.darkbackground,
+                                        ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: AppRadius.large),
+                    ),
+                    const SizedBox(height: AppRadius.large),
 
                     selectedType == TransactionType.income
                         ? IncomeForm()
                         : selectedType == TransactionType.budget
-                            ? BudgetForm()
-                            : ExpenseForm(),
+                        ? BudgetForm()
+                        : ExpenseForm(),
                   ],
                 ),
               ),
@@ -170,4 +178,3 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
   }
 }
-

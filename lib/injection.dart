@@ -114,5 +114,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoadtransactionUsecases(sl()));
 
   sl.registerFactory(() => TransactionBloc(loadtransactionUsecases: sl()),);
+
+
+  // sl.registerLazySingleton(() => ReportBloc(getReportUsecase: sl()),);
 }
 

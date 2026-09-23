@@ -6,4 +6,5 @@ class AppName {
   static const String shellName = 'shell';
   static const String addTransactionName = 'addTransaction';
   static const String transactionName = 'transaction';
+  static const String reportName = 'report';
 }

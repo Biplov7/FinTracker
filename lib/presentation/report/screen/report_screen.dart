@@ -1,9 +1,14 @@
 import 'package:fintracker/core/theme/app_colors.dart';
 import 'package:fintracker/core/theme/app_radius.dart';
 import 'package:fintracker/domain/report/entities/report_peroid.dart';
+import 'package:fintracker/presentation/report/bloc/report_bloc.dart';
+import 'package:fintracker/presentation/report/bloc/report_event.dart';
 import 'package:fintracker/presentation/report/widget/expense_overview.dart';
+import 'package:fintracker/presentation/report/widget/income_overview.dart';
+import 'package:fintracker/presentation/report/widget/income_vs_expense_overview.dart';
 import 'package:fintracker/presentation/report/widget/report_period_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
@@ -46,6 +51,9 @@ class _ReportScreenState extends State<ReportScreen> {
                         onTap: () {
                           setState(() {
                             selectedType = ReportPeroid.daily;
+                            context.read<ReportBloc>().add(
+                              LoadReportEvent(selectedType),
+                            );
                           });
                         },
                       ),
@@ -55,6 +63,9 @@ class _ReportScreenState extends State<ReportScreen> {
                         onTap: () {
                           setState(() {
                             selectedType = ReportPeroid.monthly;
+                            context.read<ReportBloc>().add(
+                              LoadReportEvent(selectedType),
+                            );
                           });
                         },
                       ),
@@ -64,6 +75,9 @@ class _ReportScreenState extends State<ReportScreen> {
                         onTap: () {
                           setState(() {
                             selectedType = ReportPeroid.yearly;
+                            context.read<ReportBloc>().add(
+                              LoadReportEvent(selectedType),
+                            );
                           });
                         },
                       ),
@@ -73,6 +87,10 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               ExpenseOverview(),
+              SizedBox(height: 20),
+              IncomeOverview(),
+              SizedBox(height: 20),
+              IncomeVsExpenseOverview(),
             ],
           ),
         ),

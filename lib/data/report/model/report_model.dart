@@ -4,20 +4,15 @@ import 'package:fintracker/domain/add_transaction/entities/expense_category.dart
 import 'package:fintracker/domain/add_transaction/entities/income_category.dart';
 
 class ReportModel extends ReportEntities {
-  final Map<IncomeCategory, double> incomeByCategory;
-  final Map<ExpenseCategory, double> expenseByCategory;
-  final DateTime startDate;
-  final DateTime endDate;
-
   ReportModel(
     super.totalIncome,
     super.totalExpense,
     super.expenseCategory,
     super.incomeCategory,
-    this.incomeByCategory,
-    this.expenseByCategory,
-    this.endDate,
-    this.startDate,
+    super.incomeByCategory,
+    super.expenseByCategory,
+    super.startDate,
+    super.endDate,
   );
 
   factory ReportModel.fromMap(Map<String, dynamic> map) {
@@ -36,19 +31,29 @@ class ReportModel extends ReportEntities {
 
       Map<IncomeCategory, double>.from(
         (map['incomeByCategory'] ?? {}).map(
-          (key, value) => MapEntry(key, (value as num).toDouble()),
+          (key, value) => MapEntry(
+            IncomeCategory.values.firstWhere(
+              (category) => category.name == key,
+            ),
+            (value as num).toDouble(),
+          ),
         ),
       ),
 
       Map<ExpenseCategory, double>.from(
         (map['expenseByCategory'] ?? {}).map(
-          (key, value) => MapEntry(key, (value as num).toDouble()),
+          (key, value) => MapEntry(
+            ExpenseCategory.values.firstWhere(
+              (category) => category.name == key,
+            ),
+            (value as num).toDouble(),
+          ),
         ),
       ),
 
-      (map['endDate'] as Timestamp).toDate(),
-
       (map['startDate'] as Timestamp).toDate(),
+
+      (map['endDate'] as Timestamp).toDate(),
     );
   }
 
@@ -60,8 +65,13 @@ class ReportModel extends ReportEntities {
       'expenseCategory': expenseCategory.name,
       'incomeCategory': incomeCategory.name,
 
-      'incomeByCategory': incomeByCategory,
-      'expenseByCategory': expenseByCategory,
+      'incomeByCategory': incomeByCategory.map(
+        (key, value) => MapEntry(key.name, value),
+      ),
+
+      'expenseByCategory': expenseByCategory.map(
+        (key, value) => MapEntry(key.name, value),
+      ),
 
       'startDate': Timestamp.fromDate(startDate),
       'endDate': Timestamp.fromDate(endDate),

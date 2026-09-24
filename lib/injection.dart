@@ -5,6 +5,8 @@ import 'package:fintracker/data/dashboard/datasource/getdashboarddata.dart';
 import 'package:fintracker/data/dashboard/repositories/dashboard_repo_implementation.dart';
 import 'package:fintracker/data/add_transaction/repositories/transaction_repo_implementation.dart';
 import 'package:fintracker/data/add_transaction/datasource/transaction_datasource.dart';
+import 'package:fintracker/data/report/datasource/report_datasource.dart';
+import 'package:fintracker/data/report/repositories/report_repositoires.dart';
 import 'package:fintracker/data/transaction/datasource/gettransactiondata.dart';
 import 'package:fintracker/data/transaction/repositories/transaction_repo.dart';
 import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
@@ -22,11 +24,14 @@ import 'package:fintracker/domain/add_transaction/usecases/setbudget_usecase.dar
 import 'package:fintracker/domain/add_transaction/repositories/transaction_repositories.dart';
 import 'package:fintracker/domain/add_transaction/usecases/addexpense_usecase.dart';
 import 'package:fintracker/domain/add_transaction/usecases/addincome_usecase.dart';
+import 'package:fintracker/domain/report/repositories/report_repos.dart';
+import 'package:fintracker/domain/report/usecases/get_report_usecase.dart';
 import 'package:fintracker/domain/transaction/repositories/viewtransaction_repostiories.dart';
 import 'package:fintracker/domain/transaction/usecases/loadtransaction_usecases.dart';
 import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
+import 'package:fintracker/presentation/report/bloc/report_bloc.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -99,7 +104,7 @@ Future<void> init() async {
       addexpenseUsecase: sl(),
       addincomeUsecase: sl(),
       setBudgetUsecase: sl(),
-      updatedashboarddataUsecase: sl()
+      updatedashboarddataUsecase: sl(),
     ),
   );
 
@@ -113,9 +118,13 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => LoadtransactionUsecases(sl()));
 
-  sl.registerFactory(() => TransactionBloc(loadtransactionUsecases: sl()),);
+  sl.registerFactory(() => TransactionBloc(loadtransactionUsecases: sl()));
 
+  sl.registerLazySingleton(() => ReportDatasource(firebaseStore, firebaseAuth));
 
-  // sl.registerLazySingleton(() => ReportBloc(getReportUsecase: sl()),);
+  sl.registerLazySingleton<ReportRepo>(() => ReportRepositoires(sl()));
+
+  sl.registerLazySingleton(() => GetReportUsecase(sl()));
+
+  sl.registerFactory(() => ReportBloc(getReportUsecase: sl()));
 }
-

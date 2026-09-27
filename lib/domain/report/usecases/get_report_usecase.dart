@@ -6,7 +6,7 @@ class GetReportUsecase {
   final ReportRepo repo;
   GetReportUsecase(this.repo);
 
-  Future<ReportEntities> call({required ReportPeroid peroid}){
+  Stream<ReportEntities> call({required ReportPeroid peroid}){
     return repo.getReport(peroid);
   }
 }

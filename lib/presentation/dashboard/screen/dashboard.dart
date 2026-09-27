@@ -46,28 +46,32 @@ class _DashboardState extends State<Dashboard> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      body: BlocConsumer<DashboardBloc, DashboardState>(
-        listener: (context, state) {
-          if (state is DashboardFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error)));
-          }
-        },
-        builder: (context, state) {
-          if (state is DashboardLoading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (state is DashboardLoaded) {
-            return Stack(
-              children: [
-                _buildBackground(),
-                SafeArea(
-                  bottom: false,
-                  child: Column(
+      body: Stack(
+        children: [
+          _buildBackground(),
+
+          SafeArea(
+            child: BlocConsumer<DashboardBloc, DashboardState>(
+              listener: (context, state) {
+                if (state is DashboardFailure) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.error)));
+                }
+              },
+
+              builder: (context, state) {
+                if (state is DashboardLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state is DashboardLoaded) {
+                  return Column(
                     children: [
                       _notificationSection(context, state.userName),
+
                       const SizedBox(height: 20),
+
                       Expanded(
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.fromLTRB(14, 0, 14, 110),
@@ -76,31 +80,38 @@ class _DashboardState extends State<Dashboard> with RouteAware {
                               MyBalanceCard(
                                 currentBalance: state.dashboard.currentBalance,
                               ),
+
                               const SizedBox(height: AppSpacing.md),
+
                               statCard(
                                 state.dashboard.totalIncome,
                                 state.dashboard.totalExpenses,
                                 state.dashboard.totalSaving,
                               ),
+
                               const SizedBox(height: AppSpacing.md),
+
                               MyBudgetProgress(
                                 budgetLimit: state.dashboard.budgetLimit,
                                 budgetUsed: state.dashboard.budgetUsed,
                               ),
+
                               const SizedBox(height: AppSpacing.md),
+
                               MyRecentTransaction(),
                             ],
                           ),
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ],
-            );
-          }
-          return SizedBox();
-        },
+                  );
+                }
+
+                return const SizedBox();
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

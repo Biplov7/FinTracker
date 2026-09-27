@@ -29,40 +29,35 @@ class ReportDatasource {
     return userDoc(uid).collection('expense');
   }
 
-  Future<List<IncomeModel>> getIncome({
+  Stream<List<IncomeModel>> getIncome({
     required DateTime startDate,
     required DateTime endDate,
-  }) async {
-    try {
-      final snapshot = await incomeCollection(uid)
-          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
-          .where('date', isLessThan: Timestamp.fromDate(endDate))
-          .orderBy('date', descending: true)
-          .get();
-
-      return snapshot.docs.map((income) {
-        return IncomeModel.fromMap(income.data());
-      }).toList();
-    } catch (e) {
-      throw Exception('Failed to fetch the income: $e');
-    }
+  }) {
+    return incomeCollection(uid)
+        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+        .where('date', isLessThan: Timestamp.fromDate(endDate))
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((income) {
+            return IncomeModel.fromMap(income.data());
+          }).toList();
+        });
   }
 
-  Future<List<ExpenseModel>> getExpense({
+  Stream<List<ExpenseModel>> getExpense({
     required DateTime startDate,
     required DateTime endDate,
-  }) async {
-    try {
-      final snapshot = await expenseCollection(uid)
-          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
-          .where('date', isLessThan: Timestamp.fromDate(endDate))
-          .orderBy('date', descending: true)
-          .get();
-      return snapshot.docs.map((expense) {
-        return ExpenseModel.fromMap(expense.data());
-      },).toList();
-    } catch (e) {
-      throw Exception('Failed to fetch the expense: $e');
-    }
+  }) {
+    return expenseCollection(uid)
+        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+        .where('date', isLessThan: Timestamp.fromDate(endDate))
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((expense) {
+            return ExpenseModel.fromMap(expense.data());
+          }).toList();
+        });
   }
 }

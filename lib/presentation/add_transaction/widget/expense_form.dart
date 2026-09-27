@@ -48,6 +48,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
       selectedCategory = null;
       _selectedDate = null;
       source = null;
+      _isFormSubmitted = false;
     });
     _formKey.currentState?.reset();
   }
@@ -149,7 +150,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 iconColor: AppColors.primary,
                 onChanged: (value) {
                   setState(() => selectedCategory = value);
-                  _formKey.currentState?.validate();
                 },
               ),
               if (_isFormSubmitted && selectedCategory == null)
@@ -183,7 +183,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   setState(() {
                     source = value;
                   });
-                  _formKey.currentState?.validate();
                 },
               ),
               if (_isFormSubmitted && source == null)

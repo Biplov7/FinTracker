@@ -1,12 +1,17 @@
 import 'package:fintracker/core/router/app_name.dart';
 import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/domain/report/entities/report_peroid.dart';
 import 'package:fintracker/injection.dart' as di;
 import 'package:fintracker/presentation/dashboard/screen/dashboard.dart';
+import 'package:fintracker/presentation/profile/screen/profile.dart';
 import 'package:fintracker/presentation/report/bloc/report_bloc.dart';
+import 'package:fintracker/presentation/report/bloc/report_event.dart';
 import 'package:fintracker/presentation/report/screen/report_screen.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_event.dart';
 import 'package:fintracker/presentation/transaction/screen/transaction.dart';
+import 'package:fintracker/presentation/wallet/bloc/wallet_bloc.dart';
+import 'package:fintracker/presentation/wallet/screen/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -30,11 +35,23 @@ class _MainShellState extends State<MainShell> {
       child: Transaction(),
     ),
     BlocProvider(
-      create: (context) => di.sl<ReportBloc>(),
-      child: ReportScreen(),
+      create: (context) {
+        final bloc = di.sl<ReportBloc>();
+
+        bloc.add(LoadReportEvent(ReportPeroid.monthly));
+
+        return bloc;
+      },
+      child: const ReportScreen(),
     ),
-    // Wallet(),
-    // profile()
+    BlocProvider(
+      create: (context) {
+        final bloc = di.sl<WalletBloc>();
+        return bloc;
+      },
+      child: WalletScreen(),
+    ),
+    Profile()
   ];
 
   int selectedValue = 0;
@@ -98,7 +115,7 @@ class _MainShellState extends State<MainShell> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          context.push(AppName.addTransactionName);
+          context.pushNamed(AppName.addTransactionName);
         },
         child: Icon(Icons.add),
       ),

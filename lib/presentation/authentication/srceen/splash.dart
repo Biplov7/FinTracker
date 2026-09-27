@@ -40,24 +40,11 @@ class _SplashState extends State<Splash> {
       final dashboardBloc = di.sl<DashboardBloc>();
       dashboardBloc.add(LoadDashboard());
 
-      // Wait for the dashboard data to load using a Completer
-      final completer = Completer<void>();
-      late StreamSubscription subscription;
-
-      subscription = dashboardBloc.stream.listen((state) {
-        if (state is DashboardLoaded) {
-          subscription.cancel();
-          completer.complete();
-        } else if (state is DashboardFailure) {
-          subscription.cancel();
-          completer.complete(); // Complete anyway so we don't hang
-        }
-      });
-
-      // Wait for the data to load
-      await completer.future;
+      await dashboardBloc.stream.firstWhere(
+        (state) => state is DashboardLoaded || state is DashboardFailure,
+      );
     } catch (e) {
-      // Silently fail
+      throw StateError("Cannot load data ${e.toString()}");
     }
   }
 

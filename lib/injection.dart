@@ -9,6 +9,8 @@ import 'package:fintracker/data/report/datasource/report_datasource.dart';
 import 'package:fintracker/data/report/repositories/report_repositoires.dart';
 import 'package:fintracker/data/transaction/datasource/gettransactiondata.dart';
 import 'package:fintracker/data/transaction/repositories/transaction_repo.dart';
+import 'package:fintracker/data/wallet/datasource/wallet_datasource.dart';
+import 'package:fintracker/data/wallet/repositories/wallet_repositories_implementation.dart';
 import 'package:fintracker/domain/authentication/repositories/auth_repositories.dart';
 import 'package:fintracker/domain/authentication/usecases/getcurrentuser_usecase.dart';
 import 'package:fintracker/domain/authentication/usecases/isloggedin_usecase.dart';
@@ -28,11 +30,14 @@ import 'package:fintracker/domain/report/repositories/report_repos.dart';
 import 'package:fintracker/domain/report/usecases/get_report_usecase.dart';
 import 'package:fintracker/domain/transaction/repositories/viewtransaction_repostiories.dart';
 import 'package:fintracker/domain/transaction/usecases/loadtransaction_usecases.dart';
+import 'package:fintracker/domain/wallet/repositories/wallet_repositories.dart';
+import 'package:fintracker/domain/wallet/usecases/get_amount_usecases.dart';
 import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
 import 'package:fintracker/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:fintracker/presentation/add_transaction/bloc/all_transaction_bloc.dart';
 import 'package:fintracker/presentation/report/bloc/report_bloc.dart';
 import 'package:fintracker/presentation/transaction/bloc/transaction_bloc.dart';
+import 'package:fintracker/presentation/wallet/bloc/wallet_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -78,7 +83,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => SetBudgetUsecase(sl()));
 
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => DashboardBloc(
       getdashboarddataUsecase: sl(),
       getrecenttransactionUsecase: sl(),
@@ -127,4 +132,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetReportUsecase(sl()));
 
   sl.registerFactory(() => ReportBloc(getReportUsecase: sl()));
+
+  sl.registerFactory(() => WalletBloc(sl()));
+
+  sl.registerLazySingleton(() => GetAmountUsecases(sl()));
+
+  sl.registerLazySingleton<WalletRepositories>(() => WalletRepositoriesImplementation(sl()));
+
+  sl.registerLazySingleton(() => WalletDatasource(firebaseStore, firebaseAuth));
 }

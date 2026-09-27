@@ -48,6 +48,7 @@ class _IncomeFormState extends State<IncomeForm> {
       selectedCategory = null;
       _selectedDate = null;
       source = null;
+      _isFormSubmitted = false;
     });
     _formKey.currentState?.reset();
   }
@@ -149,7 +150,6 @@ class _IncomeFormState extends State<IncomeForm> {
                 iconColor: AppColors.success,
                 onChanged: (value) {
                   setState(() => selectedCategory = value);
-                  _formKey.currentState?.validate();
                 },
               ),
               if (_isFormSubmitted && selectedCategory == null)
@@ -186,7 +186,6 @@ class _IncomeFormState extends State<IncomeForm> {
                   setState(() {
                     source = value;
                   });
-                  _formKey.currentState?.validate();
                 },
               ),
               if (_isFormSubmitted && source == null)

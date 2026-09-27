@@ -25,13 +25,13 @@ class _LoginState extends State<Login> {
   final TextEditingController password = TextEditingController();
   bool pw = true;
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  String? _validateEmail(String? value){
-    if(value == null || value.isEmpty){
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
       return "Please enter the email";
     }
     RegExp emailRegExp = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
 
-    if(!emailRegExp.hasMatch(value)){
+    if (!emailRegExp.hasMatch(value)) {
       return "Enter a valid email";
     }
     return null;
@@ -56,7 +56,7 @@ class _LoginState extends State<Login> {
               backgroundColor: AppColors.success,
             ),
           );
-          context.goNamed(AppName.homeName);
+          context.goNamed(AppName.shellName);
         }
 
         if (state is AuthFailure) {
@@ -157,7 +157,9 @@ class _LoginState extends State<Login> {
                                     email.text,
                                     password.text,
                                   );
-                                  context.read<AuthBloc>().add(AuthSignIn(login));
+                                  context.read<AuthBloc>().add(
+                                    AuthSignIn(login),
+                                  );
                                 },
                               ),
                         SizedBox(height: AppSpacing.md),
@@ -186,7 +188,7 @@ class _LoginState extends State<Login> {
                           ],
                         ),
                         SizedBox(height: AppSpacing.md),
-                        MyButton( 
+                        MyButton(
                           text: "Continue with Google",
                           color: AppColors.background,
                           txtColor: Colors.black,
@@ -230,4 +232,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

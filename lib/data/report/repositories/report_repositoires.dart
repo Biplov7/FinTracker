@@ -31,45 +31,55 @@ class ReportRepositoires implements ReportRepo {
   }
 
   Stream<(List<IncomeModel>, List<ExpenseModel>)> _combineStreams(
-    Stream<List<IncomeModel>> streamA,
-    Stream<List<ExpenseModel>> streamB,
+    Stream<List<IncomeModel>> incomeStream,
+    Stream<List<ExpenseModel>> expenseStream,
   ) {
     late StreamController<(List<IncomeModel>, List<ExpenseModel>)> controller;
-    StreamSubscription? subA;
-    StreamSubscription? subB;
-    List<IncomeModel>? latestA;
-    List<ExpenseModel>? latestB;
 
-    void emitIfReady() {
-      if (latestA != null && latestB != null && !controller.isClosed) {
-        controller.add((latestA!, latestB!));
+    StreamSubscription? incomeSubscription;
+    StreamSubscription? expenseSubscription;
+
+    List<IncomeModel>? latestIncome;
+    List<ExpenseModel>? latestExpense;
+
+    void emitCombinedData() {
+      if (latestIncome != null &&
+          latestExpense != null &&
+          !controller.isClosed) {
+        controller.add((latestIncome!, latestExpense!));
       }
     }
 
     controller = StreamController<(List<IncomeModel>, List<ExpenseModel>)>(
       onListen: () {
-        subA = streamA.listen(
-          (data) {
-            latestA = data;
-            emitIfReady();
+        incomeSubscription = incomeStream.listen(
+          (incomeData) {
+            latestIncome = incomeData;
+            emitCombinedData();
           },
-          onError: (e) {
-            if (!controller.isClosed) controller.addError(e);
+          onError: (error) {
+            if (!controller.isClosed) {
+              controller.addError(error);
+            }
           },
         );
-        subB = streamB.listen(
-          (data) {
-            latestB = data;
-            emitIfReady();
+
+        expenseSubscription = expenseStream.listen(
+          (expenseData) {
+            latestExpense = expenseData;
+            emitCombinedData();
           },
-          onError: (e) {
-            if (!controller.isClosed) controller.addError(e);
+          onError: (error) {
+            if (!controller.isClosed) {
+              controller.addError(error);
+            }
           },
         );
       },
+
       onCancel: () async {
-        await subA?.cancel();
-        await subB?.cancel();
+        await incomeSubscription?.cancel();
+        await expenseSubscription?.cancel();
       },
     );
 

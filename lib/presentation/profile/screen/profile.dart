@@ -1,5 +1,6 @@
 import 'package:fintracker/core/router/app_name.dart';
 import 'package:fintracker/core/theme/app_colors.dart';
+import 'package:fintracker/core/theme/app_text_style.dart';
 import 'package:fintracker/presentation/authentication/bloc/auth_bloc.dart';
 import 'package:fintracker/presentation/authentication/bloc/auth_event.dart';
 import 'package:fintracker/presentation/authentication/bloc/auth_state.dart';
@@ -14,7 +15,6 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
@@ -26,9 +26,11 @@ class Profile extends StatelessWidget {
             if (state is AuthAuthenticate) {
               final userName = state.user.username;
               final email = state.user.email;
+
               return Column(
                 children: [
                   _ProfileHeader(userName, email),
+
                   Expanded(
                     child: ListView(
                       padding: EdgeInsets.zero,
@@ -85,7 +87,8 @@ class Profile extends StatelessWidget {
                 ],
               );
             }
-            return SizedBox();
+
+            return const SizedBox();
           },
         ),
       ),
@@ -95,8 +98,8 @@ class Profile extends StatelessWidget {
 
 class _ProfileHeader extends StatelessWidget {
   final String userName;
-
   final String email;
+
   const _ProfileHeader(this.userName, this.email);
 
   @override
@@ -126,16 +129,20 @@ class _ProfileHeader extends StatelessWidget {
 
           Text(
             userName,
-            style: TextStyle(
+            style: AppTextStyles.textTheme.titleSmall?.copyWith(
               color: AppColors.background,
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
             ),
           ),
 
           const SizedBox(height: 2),
 
-          Text(email, style: TextStyle(color: AppColors.card, fontSize: 11)),
+          Text(
+            email,
+            style: AppTextStyles.textTheme.bodyMedium?.copyWith(
+              color: AppColors.card,
+              fontSize: 11,
+            ),
+          ),
         ],
       ),
     );
@@ -178,7 +185,7 @@ class _ProfileOption extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
+                style: AppTextStyles.textTheme.bodyMedium?.copyWith(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: isLogout ? Colors.red : Colors.black87,
@@ -189,7 +196,10 @@ class _ProfileOption extends StatelessWidget {
             if (trailing != null)
               Text(
                 trailing!,
-                style: const TextStyle(fontSize: 11, color: Colors.grey),
+                style: AppTextStyles.textTheme.bodyMedium?.copyWith(
+                  fontSize: 11,
+                  color: Colors.grey,
+                ),
               ),
 
             if (trailing != null) const SizedBox(width: 10),

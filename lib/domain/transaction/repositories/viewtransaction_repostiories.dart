@@ -2,7 +2,7 @@
 import 'package:fintracker/domain/transaction/entity/transaction_filter.dart';
 
 abstract class ViewtransactionRepostiories {
-  Future<List<TransactionEntity>> loadTransaction(
+  Stream<List<TransactionEntity>> loadTransaction(
     TransactionFilter filter,
   );
 }

@@ -51,7 +51,7 @@ class _MainShellState extends State<MainShell> {
       },
       child: WalletScreen(),
     ),
-    Profile()
+    Profile(),
   ];
 
   int selectedValue = 0;
@@ -112,13 +112,15 @@ class _MainShellState extends State<MainShell> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () {
-          context.pushNamed(AppName.addTransactionName);
-        },
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: selectedValue == 0 || selectedValue == 1
+          ? FloatingActionButton(
+              shape: const CircleBorder(),
+              onPressed: () {
+                context.pushNamed(AppName.addTransactionName);
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
       body: IndexedStack(index: selectedValue, children: screen),
     );
   }

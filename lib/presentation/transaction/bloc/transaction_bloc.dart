@@ -1,3 +1,5 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:fintracker/domain/transaction/entity/transaction_entity.dart';
 import 'package:fintracker/domain/transaction/entity/transaction_enum.dart';
 import 'package:fintracker/domain/transaction/enum/transaction_peroid.dart';
 import 'package:fintracker/domain/transaction/helper/transaction_date_calculation.dart';
@@ -8,54 +10,56 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   final LoadtransactionUsecases loadtransactionUsecases;
+
   TransactionBloc({required this.loadtransactionUsecases})
-    : super((InitialState())) {
-    on<InitialEvent>(_initialEvent);
-    on<LoadTransactionEvent>(_loadTransactionEvent);
+      : super(InitialState()) {
+    on<InitialEvent>(_initialEvent, transformer: restartable());
+    on<LoadTransactionEvent>(_loadTransactionEvent, transformer: restartable());
   }
 
-  Future<void> _initialEvent(InitialEvent event, Emitter<TransactionState> emit) async {
-    try {
-      emit(TransactionLoading());
-      final dataRange = getDateTime(TransactionPeroid.thisYear);
-      final transaction = await loadtransactionUsecases.call(
+  Future<void> _initialEvent(
+    InitialEvent event,
+    Emitter<TransactionState> emit,
+  ) async {
+    emit(TransactionLoading());
+    final dataRange = getDateTime(TransactionPeroid.thisYear);
+
+    await emit.forEach<List<TransactionEntity>>(
+      loadtransactionUsecases.call(
         type: TransactionEnum.all,
         startDate: dataRange.startDate,
         endDate: dataRange.endDate,
-      );
-      emit(
-        TransactionSuccess(
-          transactions: transaction,
-          period: TransactionPeroid.thisYear,
-          type: TransactionEnum.all,
-        ),
-      );
-    } catch (e) {
-      emit(TransactionFailure('Cannot Load Transaction'));
-    }
+      ),
+      onData: (transactions) => TransactionSuccess(
+        transactions: transactions,
+        period: TransactionPeroid.thisYear,
+        type: TransactionEnum.all,
+      ),
+      onError: (error, stackTrace) =>
+          TransactionFailure("Cannot Load Transaction"),
+    );
   }
 
   Future<void> _loadTransactionEvent(
     LoadTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    try {
-      emit(TransactionLoading());
-      final dataRange = getDateTime(event.period);
-      final transaction = await loadtransactionUsecases.call(
+    emit(TransactionLoading());
+    final dataRange = getDateTime(event.period);
+
+    await emit.forEach<List<TransactionEntity>>(
+      loadtransactionUsecases.call(
         type: event.type,
         startDate: dataRange.startDate,
         endDate: dataRange.endDate,
-      );
-      emit(
-        TransactionSuccess(
-          transactions: transaction,
-          period: event.period,
-          type: event.type,
-        ),
-      );
-    } catch (e) {
-      emit(TransactionFailure(e.toString()));
-    }
+      ),
+      onData: (transactions) => TransactionSuccess(
+        transactions: transactions,
+        period: event.period,
+        type: event.type,
+      ),
+      onError: (error, stackTrace) =>
+          TransactionFailure("Failed to load: ${error.toString()}"),
+    );
   }
 }

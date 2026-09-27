@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintracker/data/add_transaction/model/expense_model.dart';
 import 'package:fintracker/data/add_transaction/model/income_model.dart';
 import 'package:fintracker/data/transaction/model/transaction_model.dart';
 import 'package:fintracker/domain/transaction/entity/transaction_filter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
 
 class Gettransactiondata {
   final FirebaseFirestore firestore;
@@ -14,7 +14,6 @@ class Gettransactiondata {
 
   String get user {
     final uid = auth.currentUser?.uid;
-
     if (uid == null) {
       throw StateError("No user is signed in");
     }
@@ -36,110 +35,122 @@ class Gettransactiondata {
     return userDoc(uid).collection('expense');
   }
 
-  Future<List<TransactionModel>> getAllTransaction(
+  Stream<List<TransactionModel>> getAllTransaction(
     TransactionFilter filter,
-  ) async {
-    final incomeSnapshot = await income(user)
-        .where('date', isGreaterThanOrEqualTo: filter.startDate)
-        .where('date', isLessThan: filter.endDate)
-        .orderBy('date', descending: true)
-        .get();
+  ) {
+    final incomeStream = getIncomeTransaction(filter);
+    final expenseStream = getExpenseTransaction(filter);
 
-    final expenseSnapshot = await expense(user)
-        .where('date', isGreaterThanOrEqualTo: filter.startDate)
-        .where('date', isLessThan: filter.endDate)
-        .orderBy('date', descending: true)
-        .get();
-
-    final incomeTransaction = incomeSnapshot.docs.map((e) {
-      final incomeData = IncomeModel.fromMap(e.data());
-      // Convert IncomeModel to TransactionModel
-      return TransactionModel(
-        incomeData.id,
-        incomeData.amount,
-        incomeData.date,
-        null, // expenseCategory
-        incomeData.category, // incomeCategory
-        incomeData.source,
-        null, // wallet
-      );
+    return _combineStreams(incomeStream, expenseStream).map((data) {
+      final combined = [...data.$1, ...data.$2];
+      combined.sort((a, b) => b.date.compareTo(a.date));
+      return combined;
     });
-
-    final expenseTransaction = expenseSnapshot.docs.map((e) {
-      final expenseData = ExpenseModel.fromMap(e.data());
-      // Convert ExpenseModel to TransactionModel
-      return TransactionModel(
-        expenseData.id,
-        expenseData.amount,
-        expenseData.date,
-        expenseData.category, // expenseCategory
-        null, // incomeCategory
-        null, // source
-        expenseData.wallet,
-      );
-    });
-
-    final allTransaction = [
-      ...incomeTransaction,
-      ...expenseTransaction,
-    ].toList();
-
-    allTransaction.sort((a, b) {
-      return b.date.compareTo(a.date);
-    });
-
-    return allTransaction;
   }
 
-  Future<List<TransactionModel>> getIncomeTransaction(
+  Stream<List<TransactionModel>> getIncomeTransaction(
     TransactionFilter filter,
-  ) async {
-    final incomeTransaction = await income(user)
-        .where('date', isGreaterThanOrEqualTo: filter.startDate)
-        .where('date', isLessThan: filter.endDate)
+  ) {
+    return income(user)
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(filter.startDate),
+        )
+        .where(
+          'date',
+          isLessThan: Timestamp.fromDate(filter.endDate),
+        )
         .orderBy('date', descending: true)
-        .get();
-
-    final incomeTran = incomeTransaction.docs.map((e) {
-      final incomeData = IncomeModel.fromMap(e.data());
-      // Convert IncomeModel to TransactionModel
-      return TransactionModel(
-        incomeData.id,
-        incomeData.amount,
-        incomeData.date,
-        null, // expenseCategory
-        incomeData.category, // incomeCategory
-        incomeData.source,
-        null, // wallet
-      );
-    }).toList();
-
-    return incomeTran;
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((e) {
+            final incomeData = IncomeModel.fromMap(e.data());
+            return TransactionModel(
+              incomeData.id,
+              incomeData.amount,
+              incomeData.date,
+              null,
+              incomeData.category,
+              incomeData.source,
+              null,
+            );
+          }).toList();
+        });
   }
 
-  Future<List<TransactionModel>> getExpenseTransaction(
+  Stream<List<TransactionModel>> getExpenseTransaction(
     TransactionFilter filter,
-  ) async {
-    final expesnses = await expense(user)
-        .where('date', isGreaterThanOrEqualTo: filter.startDate)
-        .where('date', isLessThan: filter.endDate)
+  ) {
+    return expense(user)
+        .where(
+          'date',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(filter.startDate),
+        )
+        .where(
+          'date',
+          isLessThan: Timestamp.fromDate(filter.endDate),
+        )
         .orderBy('date', descending: true)
-        .get();
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((e) {
+            final expenseData = ExpenseModel.fromMap(e.data());
+            return TransactionModel(
+              expenseData.id,
+              expenseData.amount,
+              expenseData.date,
+              expenseData.category,
+              null,
+              null,
+              expenseData.wallet,
+            );
+          }).toList();
+        });
+  }
 
-    final expenseTrans = expesnses.docs.map((e) {
-      final expenseData = ExpenseModel.fromMap(e.data());
-      // Convert ExpenseModel to TransactionModel
-      return TransactionModel(
-        expenseData.id,
-        expenseData.amount,
-        expenseData.date,
-        expenseData.category,
-        null,
-        null,
-        expenseData.wallet,
-      );
-    }).toList();
+  Stream<(List<TransactionModel>, List<TransactionModel>)> _combineStreams(
+    Stream<List<TransactionModel>> streamA,
+    Stream<List<TransactionModel>> streamB,
+  ) {
+    late StreamController<(List<TransactionModel>, List<TransactionModel>)> controller;
+    StreamSubscription? subA;
+    StreamSubscription? subB;
+    List<TransactionModel>? latestA;
+    List<TransactionModel>? latestB;
 
-    return expenseTrans;
+    void emitIfReady() {
+      if (latestA != null && latestB != null && !controller.isClosed) {
+        controller.add((latestA!, latestB!));
+      }
+    }
+
+    controller = StreamController<(List<TransactionModel>, List<TransactionModel>)>(
+      onListen: () {
+        subA = streamA.listen(
+          (data) {
+            latestA = data;
+            emitIfReady();
+          },
+          onError: (e) {
+            if (!controller.isClosed) controller.addError(e);
+          },
+        );
+        subB = streamB.listen(
+          (data) {
+            latestB = data;
+            emitIfReady();
+          },
+          onError: (e) {
+            if (!controller.isClosed) controller.addError(e);
+          },
+        );
+      },
+      onCancel: () async {
+        await subA?.cancel();
+        await subB?.cancel();
+      },
+    );
+
+    return controller.stream;
   }
 }

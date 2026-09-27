@@ -8,7 +8,7 @@ class LoadtransactionUsecases {
 
   LoadtransactionUsecases(this.repo);
 
-  Future<List<TransactionEntity>> call({
+  Stream<List<TransactionEntity>> call({
     required TransactionEnum type,
     required DateTime startDate,
     required DateTime endDate,

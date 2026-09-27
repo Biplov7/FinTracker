@@ -1,4 +1,5 @@
-﻿import 'package:fintracker/core/theme/app_colors.dart';
+﻿import 'package:fintracker/core/router/app_name.dart';
+import 'package:fintracker/core/theme/app_colors.dart';
 import 'package:fintracker/core/theme/app_spacing.dart';
 import 'package:fintracker/core/utils/currency_formatter.dart';
 import 'package:fintracker/domain/add_transaction/entities/expense_category.dart';
@@ -9,6 +10,7 @@ import 'package:fintracker/presentation/dashboard/bloc/dashboard_state.dart';
 import 'package:fintracker/presentation/add_transaction/widget/transaction_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class MyRecentTransaction extends StatelessWidget {
@@ -56,11 +58,16 @@ class MyRecentTransaction extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      "See All",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.success,
-                        fontWeight: FontWeight.bold,
+                    InkWell(
+                      onTap: () {
+                        context.pushNamed(AppName.reportName);
+                      },
+                      child: Text(
+                        "See All",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.success,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],

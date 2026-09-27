@@ -9,14 +9,14 @@ class TransactionRepo implements ViewtransactionRepostiories{
 
   TransactionRepo(this.ds);
   @override
-  Future<List<TransactionEntity>> loadTransaction(TransactionFilter filter) async {
+  Stream<List<TransactionEntity>> loadTransaction(TransactionFilter filter) {
     switch (filter.type) {
       case TransactionEnum.all:
-        return await ds.getAllTransaction(filter);
+        return ds.getAllTransaction(filter);
       case TransactionEnum.income:
-        return await ds.getIncomeTransaction(filter);
+        return ds.getIncomeTransaction(filter);
       case TransactionEnum.expense:
-        return await ds.getExpenseTransaction(filter);
+        return ds.getExpenseTransaction(filter);
     }
   }
 }

@@ -133,6 +133,7 @@ class _TransactionState extends State<Transaction> {
                     },
                   );
                   if (peroid != null) {
+                    if (!context.mounted) return;
                     setState(() {
                       selectPeroid = peroid;
                     });
